@@ -28,28 +28,28 @@ public class XUnitTest1
     public void Test02()
     {
         ShowDetail = true;
-        var o3 = Global.JsoncParser.Parse("""
+        var o3 = Global.EasyLanguageParser.Parse("""
             { "a": 123 }
             """);
         Echo(o3, "o3");
         Assert.Equal("""
             {"a":123}
             """, ToJson(o3));
-        var o4 = Global.JsoncParser.Parse("""
+        var o4 = Global.EasyLanguageParser.Parse("""
             { a: 123 }
             """);
         Echo(o4, "o4");
         Assert.Equal("""
             {"a":123}
             """, ToJson(o4));
-        var o5 = Global.JsoncParser.Parse("""
+        var o5 = Global.EasyLanguageParser.Parse("""
             { "a": /*comment*/123 }
             """);
         Echo(o5, "o5");
         Assert.Equal("""
             {"a":123}
             """, ToJson(o5));
-        var o6 = Global.JsoncParser.Parse("""
+        var o6 = Global.EasyLanguageParser.Parse("""
             { "a": //line comment
               123 }
             """);
@@ -90,19 +90,19 @@ public class XUnitTest1
     {
         ShowDetail = true;
         object o;
-        o = JsoncParser.Parse("""
+        o = EasyLanguageParser.Parse("""
             "ab'\"c"
             """);
         Assert.Equal("""
             "ab'\"c"
             """, new ObjectParser(false).Stringify(o, false));
-        o = JsoncParser.Parse("""
+        o = EasyLanguageParser.Parse("""
             'ab\'"c'
             """);
         Assert.Equal("""
             "ab'\"c"
             """, new ObjectParser(false).Stringify(o, false));
-        o = JsoncParser.Parse("""
+        o = EasyLanguageParser.Parse("""
             { a: 'ab\'"c' }
             """);
         Assert.Equal("""

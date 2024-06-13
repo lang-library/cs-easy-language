@@ -6,11 +6,11 @@ namespace Global;
 
 public class CSharpJsonHandler: IJsonHandler
 {
-    JsoncParser jsonParser;
+    EasyLanguageParser jsonParser;
     ObjectParser objParser;
     public CSharpJsonHandler(bool NumberAsDecimal, bool ForceASCII)
     {
-        this.jsonParser = new JsoncParser(NumberAsDecimal);
+        this.jsonParser = new EasyLanguageParser(NumberAsDecimal);
         this.objParser = new ObjectParser(ForceASCII);
     }
     public object Parse(string json)

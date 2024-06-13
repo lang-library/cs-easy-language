@@ -5,10 +5,10 @@ using System.Text;
 
 namespace Global;
 
-public class JsoncParser
+public class EasyLanguageParser
 {
     protected bool NumberAsDecimal = false;
-    public JsoncParser(bool numberAsDecimal)
+    public EasyLanguageParser(bool numberAsDecimal)
     {
         this.NumberAsDecimal = numberAsDecimal;
     }

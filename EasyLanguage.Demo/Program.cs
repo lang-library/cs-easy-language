@@ -15,19 +15,19 @@ static class Program
     static void TestJsonc()
     {
         ShowDetail = true;
-        var o3 = Global.JsoncParser.Parse("""
+        var o3 = Global.EasyLanguageParser.Parse("""
             { 'a': 123 }
             """);
         Echo(o3, "o3");
-        var o4 = Global.JsoncParser.Parse("""
+        var o4 = Global.EasyLanguageParser.Parse("""
             { a: 123 }
             """);
         Echo(o4, "o4");
-        var o5 = Global.JsoncParser.Parse("""
+        var o5 = Global.EasyLanguageParser.Parse("""
             { "a": /*comment*/123 }
             """);
         Echo(o5, "o5");
-        var o6 = Global.JsoncParser.Parse("""
+        var o6 = Global.EasyLanguageParser.Parse("""
             { "a": //line comment
               123 }
             """);
@@ -44,7 +44,7 @@ static class Program
         Echo(json1, "json1");
         string json2 = new ObjectParser(false).Stringify(o1, true);
         Echo(json2, "json2");
-        var o2 = JsoncParser.Parse("""
+        var o2 = EasyLanguageParser.Parse("""
             [11, 22, {}, 33]
             """);
         string json3 = new ObjectParser(false).Stringify(o2, true);
@@ -67,7 +67,7 @@ static class Program
         var ox = unpickler.loads(bytes);
         Echo(new CSharpJsonHandler(true, false).Stringify(ox, true));
         Echo(new CSharpJsonHandler(true, false).Stringify(ox, true, true));
-        var o3 = Global.JsoncParser.Parse("""
+        var o3 = Global.EasyLanguageParser.Parse("""
             { "a": //line comment
               123
               b.c.d: `(777 888) }

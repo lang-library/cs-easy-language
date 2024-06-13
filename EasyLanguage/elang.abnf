@@ -2,11 +2,13 @@
 
 elang-text = ws value ws;
 
-begin-array     = ws %x5B ws;  #; [ left square bracket
+#begin-array     = ws %x5B ws;  #; [ left square bracket
+begin-array     = ws (%x5B / %x28) ws;  #; [ left square bracket
 
 begin-object    = ws %x7B ws;  #; { left curly bracket
 
-end-array       = ws %x5D ws;  #; ] right square bracket
+#end-array       = ws %x5D ws;  #; ] right square bracket
+end-array       = ws (%x5D / %x29) ws;  #; ] right square bracket
 
 end-object      = ws %x7D ws;  #; } right curly bracket
 

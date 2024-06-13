@@ -52,12 +52,71 @@ namespace Global.Parser.ELang {
           int c1 = 0;
           for (int i1 = 0; i1 < 1 && f1; i1++)
           {
-            rule = Terminal_NumericValue.Parse(context, "%x5B", "[\\x5B]", 1);
-            if ((f1 = rule != null))
+            int g1 = context.index;
+            List<ParserAlternative> as2 = new List<ParserAlternative>();
+            parsed = false;
             {
-              a1.Add(rule, context.index);
-              c1++;
+              int s2 = context.index;
+              ParserAlternative a2 = new ParserAlternative(s2);
+              parsed = true;
+              if (parsed)
+              {
+                bool f2 = true;
+                int c2 = 0;
+                for (int i2 = 0; i2 < 1 && f2; i2++)
+                {
+                  rule = Terminal_NumericValue.Parse(context, "%x5B", "[\\x5B]", 1);
+                  if ((f2 = rule != null))
+                  {
+                    a2.Add(rule, context.index);
+                    c2++;
+                  }
+                }
+                parsed = c2 == 1;
+              }
+              if (parsed)
+              {
+                as2.Add(a2);
+              }
+              context.index = s2;
             }
+            {
+              int s2 = context.index;
+              ParserAlternative a2 = new ParserAlternative(s2);
+              parsed = true;
+              if (parsed)
+              {
+                bool f2 = true;
+                int c2 = 0;
+                for (int i2 = 0; i2 < 1 && f2; i2++)
+                {
+                  rule = Terminal_NumericValue.Parse(context, "%x28", "[\\x28]", 1);
+                  if ((f2 = rule != null))
+                  {
+                    a2.Add(rule, context.index);
+                    c2++;
+                  }
+                }
+                parsed = c2 == 1;
+              }
+              if (parsed)
+              {
+                as2.Add(a2);
+              }
+              context.index = s2;
+            }
+
+            b = ParserAlternative.GetBest(as2);
+
+            parsed = b != null;
+
+            if (parsed)
+            {
+              a1.Add(b.rules, b.end);
+              context.index = b.end;
+            }
+            f1 = context.index > g1;
+            if (parsed) c1++;
           }
           parsed = c1 == 1;
         }

@@ -162,6 +162,31 @@ namespace Global.Parser.ELang {
           int c1 = 0;
           for (int i1 = 0; i1 < 1 && f1; i1++)
           {
+            rule = Rule_quote.Parse(context);
+            if ((f1 = rule != null))
+            {
+              a1.Add(rule, context.index);
+              c1++;
+            }
+          }
+          parsed = c1 == 1;
+        }
+        if (parsed)
+        {
+          as1.Add(a1);
+        }
+        context.index = s1;
+      }
+      {
+        int s1 = context.index;
+        ParserAlternative a1 = new ParserAlternative(s1);
+        parsed = true;
+        if (parsed)
+        {
+          bool f1 = true;
+          int c1 = 0;
+          for (int i1 = 0; i1 < 1 && f1; i1++)
+          {
             rule = Rule_number.Parse(context);
             if ((f1 = rule != null))
             {

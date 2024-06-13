@@ -247,6 +247,18 @@ namespace Global.Parser.ELang {
       return null;
     }
 
+    public Object Visit(Rule_quote rule)
+    {
+      if (!terminal) System.Console.WriteLine();
+      Console.Write("<quote>");
+      terminal = false;
+      VisitRules(rule.rules);
+      if (!terminal) System.Console.WriteLine();
+      Console.Write("</quote>");
+      terminal = false;
+      return null;
+    }
+
     public Object Visit(Rule_number rule)
     {
       if (!terminal) System.Console.WriteLine();

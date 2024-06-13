@@ -106,6 +106,11 @@ namespace Global.Parser.ELang {
       return VisitRules(rule.rules);
     }
 
+    public Object Visit(Rule_quote rule)
+    {
+      return VisitRules(rule.rules);
+    }
+
     public Object Visit(Rule_number rule)
     {
       return VisitRules(rule.rules);

@@ -24,6 +24,7 @@ namespace Global.Parser.ELang {
     Object Visit(Rule_member rule);
     Object Visit(Rule_member_name rule);
     Object Visit(Rule_array rule);
+    Object Visit(Rule_quote rule);
     Object Visit(Rule_number rule);
     Object Visit(Rule_decimal_point rule);
     Object Visit(Rule_digit rule);

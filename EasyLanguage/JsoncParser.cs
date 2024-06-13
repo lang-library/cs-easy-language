@@ -229,6 +229,13 @@ public class JsoncParser
                 return RuleToObject(rules[0], NumberAsDecimal);
             }
         }
+        else if (rule is Rule_quote)
+        {
+            var result = new List<object>();
+            result.Add("quote");
+            result.Add(RuleToObject(rules[1], NumberAsDecimal));
+            return result;
+        }
         else if (rule is Rule_array)
         {
             var result = new List<object>();

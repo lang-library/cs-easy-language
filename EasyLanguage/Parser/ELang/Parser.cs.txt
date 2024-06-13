@@ -161,6 +161,7 @@ namespace Global.Parser.ELang {
       else if (rulename.ToLower().Equals("member".ToLower())) rule = Rule_member.Parse(context);
       else if (rulename.ToLower().Equals("member-name".ToLower())) rule = Rule_member_name.Parse(context);
       else if (rulename.ToLower().Equals("array".ToLower())) rule = Rule_array.Parse(context);
+      else if (rulename.ToLower().Equals("quote".ToLower())) rule = Rule_quote.Parse(context);
       else if (rulename.ToLower().Equals("number".ToLower())) rule = Rule_number.Parse(context);
       else if (rulename.ToLower().Equals("decimal-point".ToLower())) rule = Rule_decimal_point.Parse(context);
       else if (rulename.ToLower().Equals("digit".ToLower())) rule = Rule_digit.Parse(context);

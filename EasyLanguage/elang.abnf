@@ -31,7 +31,8 @@ comment = "/*" inmlcomment "*/";
 inslcomment = *( %x01-09 / %x0B / %x0C / %x0E-FFFFFFFF );
 inmlcomment = *( %x01-29 / %x2B-FFFFFFFF / ( %x2A ( %x01-2E / %x30-FFFFFFFF ) ) );
 
-value = false / null / true / object / array / number / string;
+#value = false / null / true / object / array / number / string;
+value = false / null / true / object / array / quote / number / string;
 
 false = %x66.61.6c.73.65;   #; false
 
@@ -46,6 +47,8 @@ member = member-name name-separator value;
 member-name = string / symbol;
 
 array = begin-array [ value *( value-separator value ) ] end-array;
+
+quote = %x60 value;
 
 number = [ minus ] int [ frac ] [ exp ];
 

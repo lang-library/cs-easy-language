@@ -67,5 +67,11 @@ static class Program
         var ox = unpickler.loads(bytes);
         Echo(new CSharpJsonHandler(true, false).Stringify(ox, true));
         Echo(new CSharpJsonHandler(true, false).Stringify(ox, true, true));
+        var o3 = Global.JsoncParser.Parse("""
+            { "a": //line comment
+              123
+              b: 777 }
+            """);
+        Echo(o3, "o3");
     }
 }

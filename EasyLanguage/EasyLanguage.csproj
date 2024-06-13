@@ -5,17 +5,17 @@
     <Version>2024.0608.0116.04</Version>
     <Nullable>disable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
-    <RootNamespace>JsoncParser</RootNamespace>
+    <RootNamespace>EasyLanguage</RootNamespace>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <NoWarn>3021,0618,8603,0168,8632,8600,8601,8604,8625,8618,8602</NoWarn>
     <Authors>JavaCommons</Authors>
     <Company>JavaCommons Technologies</Company>
-    <Product>JsoncParser</Product>
-    <Description>JsoncParser Library</Description>
+    <Product>EasyLanguage</Product>
+    <Description>EasyLanguage Library</Description>
     <Copyright>Copyright © JavaCommons Technologies 2024</Copyright>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <Title>JsoncParser Library</Title>
-    <PackageId>JsoncParser</PackageId>
+    <Title>EasyLanguage Library</Title>
+    <PackageId>EasyLanguage</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/lang-library/cs-jsonc-parser</PackageProjectUrl>
     <PackageTags>json;parser</PackageTags>
@@ -49,6 +49,7 @@
     <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="JsoncParser" Version="2024.608.116.4" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
   </ItemGroup>

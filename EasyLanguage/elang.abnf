@@ -111,4 +111,4 @@ char2 = unescaped2 /
 	 );
 unescaped2 = %x20-26 / %x28-5B / %x5D-FFFFFFFF;
 
-symbol = ( "_" / %x41-51 / %x61-7A ) *( "_" / %x41-51 / %x61-7A / %x30-39 );
+symbol = ( "_" / %x41-51 / %x61-7A ) *( "_" / "." / %x41-51 / %x61-7A / %x30-39 );

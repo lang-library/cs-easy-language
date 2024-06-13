@@ -70,7 +70,7 @@ static class Program
         var o3 = Global.JsoncParser.Parse("""
             { "a": //line comment
               123
-              b: `(777 888) }
+              b.c.d: `(777 888) }
             """);
         Echo(o3, "o3");
     }

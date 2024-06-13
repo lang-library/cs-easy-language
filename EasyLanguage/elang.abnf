@@ -12,7 +12,8 @@ end-object      = ws %x7D ws;  #; } right curly bracket
 
 name-separator  = ws %x3A ws;  #; : colon
 
-value-separator = ws %x2C ws;  #; , comma
+#value-separator = ws %x2C ws;  #; , comma
+value-separator = (ws %x2C ws) / ws;  #; , comma
 
 ws = *(
 	%x20 /              #; Space

@@ -1,11 +1,6 @@
-﻿//using MyJson;
-//using static MyJson.MyData;
-using static Global.SharpJson;
-using Xunit;
+﻿using Xunit;
 using Xunit.Abstractions;
 using Global;
-using System;
-using System.Collections;
 
 public class XUnitTest1
 {
@@ -13,105 +8,38 @@ public class XUnitTest1
     public XUnitTest1(ITestOutputHelper testOutputHelper)
     {
         Out = testOutputHelper;
-        SharpJson.ClearAllSettings();
+        EasyObject.ClearSettings();
         Print("Setup() called");
     }
     private void Print(object x, string title = null)
     {
-        Out.WriteLine(SharpJson.ToPrintable(x, title));
+        Out.WriteLine(EasyObject.ToPrintable(x, title));
     }
     [Fact]
     public void Test01()
     {
-    }
-    [Fact]
-    public void Test02()
-    {
-        ShowDetail = true;
-        var o3 = Global.EasyLanguageParser.Parse("""
-            { "a": 123 }
-            """);
-        Echo(o3, "o3");
-        Assert.Equal("""
-            {"a":123}
-            """, ToJson(o3));
-        var o4 = Global.EasyLanguageParser.Parse("""
-            { a: 123 }
-            """);
-        Echo(o4, "o4");
-        Assert.Equal("""
-            {"a":123}
-            """, ToJson(o4));
-        var o5 = Global.EasyLanguageParser.Parse("""
-            { "a": /*comment*/123 }
-            """);
-        Echo(o5, "o5");
-        Assert.Equal("""
-            {"a":123}
-            """, ToJson(o5));
-        var o6 = Global.EasyLanguageParser.Parse("""
+        var el1 = EasyObject.FromJson("""
             { "a": //line comment
-              123 }
+              123
+              b.c.d: `(777 888) }
             """);
-        Echo(o6, "o6");
+        Print(el1, "el1");
         Assert.Equal("""
-            {"a":123}
-            """, ToJson(o6));
-    }
-    [Fact]
-    public void Test03()
-    {
-        ShowDetail = true;
-        var o1 = new Global.ObjectParser(false).Parse("helloハロー©");
-        Echo(o1, "o1");
-        var json = new Global.ObjectParser(false).Stringify(o1, false);
-        Assert.Equal("""
-            "helloハロー©"
-            """, json);
-        json = new Global.ObjectParser(true).Stringify(o1, false); // ForceASII
-        Assert.Equal("""
-            "hello\u30CF\u30ED\u30FC\u00A9"
-            """, json);
-    }
-    [Fact]
-    public void Test04()
-    {
-        ShowDetail = true;
-        var o1 = new MyRedundant();
-        Echo(o1, "o1");
-        var json = new ObjectParser(false).Stringify(o1, false);
-        Echo(json, "json");
-        Assert.Equal("""
-            {"Ok":"ok"}
-            """, json);
-    }
-    [Fact]
-    public void Test05()
-    {
-        ShowDetail = true;
-        object o;
-        o = EasyLanguageParser.Parse("""
-            "ab'\"c"
+            {"a":123,"b.c.d":["quote",[777,888]]}
+            """, el1.ToJson());
+        var el2 = EasyObject.FromJson("""
+            (add2 777 888) }
             """);
+        Print(el2, "el2");
         Assert.Equal("""
-            "ab'\"c"
-            """, new ObjectParser(false).Stringify(o, false));
-        o = EasyLanguageParser.Parse("""
-            'ab\'"c'
+            ["add2",777,888]
+            """, el2.ToJson());
+        var el3 = EasyObject.FromJson("""
+            @_.!$%&-=^~+*<>/?
             """);
+        Print(el3, "el3");
         Assert.Equal("""
-            "ab'\"c"
-            """, new ObjectParser(false).Stringify(o, false));
-        o = EasyLanguageParser.Parse("""
-            { a: 'ab\'"c' }
-            """);
-        Assert.Equal("""
-            {"a":"ab'\"c"}
-            """, new ObjectParser(false).Stringify(o, false));
-    }
-    public class MyRedundant : RedundantObject
-    {
-        public string Null = null;
-        public string Ok = "ok";
+            "_.!$%&-=^~+*<>/?"
+            """, el3.ToJson());
     }
 }

@@ -17,7 +17,7 @@
     <Title>EasyLanguage Library</Title>
     <PackageId>EasyLanguage</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/lang-library/cs-jsonc-parser</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/lang-library/cs-easy-language</PackageProjectUrl>
     <PackageTags>json;parser</PackageTags>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <PackageReadmeFile>README.md</PackageReadmeFile>

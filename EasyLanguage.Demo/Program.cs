@@ -29,5 +29,10 @@ static class Program
               y: @_.!$%&-=^~+*<>/? }
             """);
         Echo(el3, "el3");
+        var elang = new EasyLanguage();
+        var ans01 = elang.EvalString("""
+            (@+ 11 22)
+            """);
+        Echo(ans01, "ans01");
     }
 }

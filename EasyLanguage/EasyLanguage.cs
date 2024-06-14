@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using static Global.EasyObject;
 
@@ -33,7 +34,13 @@ public class EasyLanguage
     }
     public EasyObject EvalString(string expText)
     {
+        Echo(expText, "expText");
         EasyObject exp = EasyObject.FromJson(expText);
         return Eval(exp);
+    }
+    public EasyObject EvalFile(string expPath)
+    {
+        string expTest = File.ReadAllText(expPath);
+        return EvalString(expTest);
     }
 }

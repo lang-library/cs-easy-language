@@ -35,5 +35,7 @@ static class Program
             (@+ 11 22)
             """);
         Echo(ans01, "ans01");
+        var ans02 = elang.EvalFile("assets/test.elAng");
+        Echo(ans02, "ans02");
     }
 }

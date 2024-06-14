@@ -31,10 +31,12 @@ static class Program
             """);
         Echo(el3, "el3");
         var elang = new EasyLanguage();
+#if false
         var ans01 = elang.EvalString("""
             (@+ 11 22)
             """);
         Echo(ans01, "ans01");
+#endif
         var ans02 = elang.EvalFile("assets/test.elAng");
         Echo(ans02, "ans02");
     }

@@ -39,5 +39,8 @@ static class Program
 #endif
         var ans02 = elang.EvalFile("assets/test.elAng");
         Echo(ans02, "ans02");
+        var csharp = new ELang.CSharpScript();
+        var answer = csharp.Evaluate("11+22");
+        Echo(answer, "answer");
     }
 }

@@ -45,5 +45,7 @@ static class Program
         var csharp = new ELang.CSharpScript();
         var answer = csharp.Evaluate("11+22");
         Echo(answer, "answer");
+        var order = EasyObject.FromJson("{b: 123, a: 456, _:789}");
+        Echo(order, "order");
     }
 }

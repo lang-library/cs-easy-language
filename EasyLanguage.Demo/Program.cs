@@ -29,8 +29,8 @@ static class Program
               123
               b: `(add2 777 888)
               x: (@1+ 123)
-              y: @_!%&-=^~+*<>/?
-              z: :keyword-_!%&-=^~+*<>/? }
+              y: @_!%&-=^~+*/?
+              z: :keyword-_!%&-=^~+*/? }
             """);
         Echo(el3, "el3");
         var elang = new EasyLanguage();

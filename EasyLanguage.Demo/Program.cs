@@ -1,10 +1,12 @@
 ﻿using Global;
 using System;
 using System.IO;
-using static Global.EasyObject;
+using static Global.ELang;
 using Microsoft.ClearScript;
 using Microsoft.ClearScript.JavaScript;
 using Microsoft.ClearScript.V8;
+using System.ComponentModel;
+using System.Web.UI;
 
 namespace Main;
 
@@ -14,13 +16,13 @@ static class Program
     [STAThread]
     static void Main(string[] originalArgs)
     {
-        var el1 = EasyObject.FromJson("""
+        var el1 = ELang.FromJson("""
             { "a": //line comment
               123
               b: `(777 888) }
             """);
         Echo(el1, "el1");
-        var el2 = EasyObject.FromJson("""
+        var el2 = ELang.FromJson("""
             { "a": //line comment
               123
               b: `(add2 777 888) }
@@ -49,7 +51,7 @@ static class Program
         var answer = csharp.Evaluate("11+22");
         Echo(answer, "answer");
 #endif
-        var order = EasyObject.FromJson("{b: 123, a: 456, _:789}");
+        var order = ELang.FromJson("{b: 123, a: 456, _:789}");
         Echo(order, "order");
         var interp = NukataLisp.MakeInterp().Result;
         interp.Def("add2", 2, a => {
@@ -141,26 +143,33 @@ static class Program
             var values = (ITypedArray<int>)engine.Script.values;
             Console.WriteLine(string.Join(", ", values.ToArray()));
 
-            // EasyObject
-            //engine.AddHostType("EasyObject", typeof(EasyObject));
-            engine.AddHostType(typeof(EasyObject));
-            var eo = EasyObject.FromObject(new []  { 1, 2, 3 });
+            // ELang
+            //engine.AddHostType("ELang", typeof(ELang));
+            //engine.AddHostType(typeof(ELang));
+            engine.AddHostType(typeof(Global.ELang));
+            var eo = Global.ELang.FromObject(new []  { 1, 2, 3 });
             engine.AddHostObject("eo", eo);
             engine.Execute("""
-                function echo(msg, title = null) { EasyObject.Echo(msg, title); }
-                globalThis.echo2 = EasyObject.Echo;
-                                EasyObject.Echo(eo, "eo");
-                EasyObject.Echo(eo[1], "eo[1]");
+                function echo(msg, title = null) { ELang.Echo(msg, title); }
+                globalThis.echo2 = ELang.Echo;
+                ELang.Echo(eo, "eo");
+                ELang.Echo(eo[1], "eo[1]");
                 echo(eo[1]);
                 var Int32T = host.type("System.Int32");
                 var intValue = host.cast(Int32T, eo[1]);
                 echo2(intValue, "intValue");
                 var intValue2 = host.cast(lib.System.Int32, eo[2]);
                 echo2(intValue2, "intValue2");
+                for(var i=0; i<eo.Count; i++)
+                {
+                  echo2(eo[i], "eo[i]");
+                }
+                var list = ELang.NewList(111, 222, 333);
+                echo2(list, "list");
                 """);
             // expose entire assemblies
-            engine.AddHostObject("lib2", new HostTypeCollection(typeof(EasyObject).Assembly));
-            engine.Execute("lib2.Global.EasyObject.Echo('from lib2')");
+            engine.AddHostObject("lib2", new HostTypeCollection(typeof(ELang).Assembly));
+            engine.Execute("lib2.Global.ELang.Echo('from lib2')");
         }
     }
 }

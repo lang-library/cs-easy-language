@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using static Global.EasyObject;
+//using static Global.EasyObject;
+using static Global.ELang;
 
 namespace Global;
 
@@ -11,60 +12,55 @@ public class EasyLanguage
     public EasyLanguage()
     {
     }
-    public EasyObject Eval(EasyObject exp)
+    public object Eval(object exp)
     {
-        Echo(exp.TypeValue, "exp.TypeValue");
-        Echo(exp.m_data.GetType().ToString());
+        //Echo(exp.TypeValue, "exp.TypeValue");
+        //Echo(exp.m_data.GetType().ToString());
         Echo(exp, "exp");
-        if (exp.TypeValue == EasyObjectType.@null)
+        if (exp == null)
         {
-            return EasyObject.Null;
+            return null;
         }
-        else if (exp.TypeValue == EasyObjectType.@number)
+        else if (exp is List<object> list)
         {
-            return exp;
-        }
-        else if (exp.TypeValue == EasyObjectType.@array)
-        {
-            if (exp.Count == 0)
+            if (list.Count == 0)
             {
-                return EasyObject.EmptyArray;
+                return new List<object>();
             }
-            var e0 = exp.AsList[0];
-            if (!e0.IsString)
+            var e0 = list[0];
+            if (!(e0 is string))
             {
                 return exp;
             }
-            string funcName = (string)e0.Dynamic;
-            var args = new List<EasyObject>();
-            for (int i = 1; i<exp.Count; i++)
+            string funcName = (string)e0;
+            var args = new List<object>();
+            for (int i = 1; i<list.Count; i++)
             {
-                args.Add(Eval(exp[i]));
+                args.Add(Eval(list[i]));
             }
-            //return new EasyObject(args);
             return EvalFunctionCall(funcName, args);
         }
-        throw new Exception($"EasyObjectType.@{exp.TypeName} is not supported.");
+        throw new Exception($"EasyObjectType.@{exp.GetType().ToString()} is not supported.");
     }
-    public EasyObject EvalString(string expText)
+    public object EvalString(string expText)
     {
         Echo(expText, "expText");
-        EasyObject exp = EasyObject.FromJson(expText);
+        object exp = ELang.FromJson(expText);
         return Eval(exp);
     }
-    public EasyObject EvalFile(string expPath)
+    public object EvalFile(string expPath)
     {
         string expTest = File.ReadAllText(expPath);
         return EvalString(expTest);
     }
-    protected EasyObject EvalFunctionCall(string funcName, List<EasyObject> args)
+    protected object EvalFunctionCall(string funcName, List<object> args)
     {
         switch (funcName)
         {
             case "+":
-                return new EasyObject(((decimal)args[0].Dynamic) + ((decimal)args[1].Dynamic));
+                return Convert.ToDecimal(args[0]) + Convert.ToDecimal(args[1]);
             default:
-                return Null;
+                return null;
         }
     }
 }

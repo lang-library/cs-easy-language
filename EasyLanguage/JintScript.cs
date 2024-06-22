@@ -2,7 +2,7 @@ using Jint;
 using System.IO;
 using System.Reflection;
 using Global;
-namespace ELang;
+namespace Global;
 public class JintScript
 {
     public static Jint.Engine CreateEngine(params Assembly[] list)
@@ -38,11 +38,11 @@ internal class JintScriptGlobal
 {
     public void print(dynamic x, string? title = null)
     {
-        EasyObject.Echo(x, title);
+        ELang.Echo(x, title);
     }
     public void log(dynamic x, string? title = null)
     {
-        EasyObject.Log(x, title);
+        ELang.Log(x, title);
     }
     public string getenv(string name)
     {

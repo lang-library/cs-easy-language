@@ -8,12 +8,11 @@ public class XUnitTest1
     public XUnitTest1(ITestOutputHelper testOutputHelper)
     {
         Out = testOutputHelper;
-        EasyObject.ClearSettings();
         Print("Setup() called");
     }
     private void Print(object x, string title = null)
     {
-        Out.WriteLine(EasyObject.ToPrintable(x, title));
+        Out.WriteLine(ELang.ToPrintable(x, title));
     }
     [Fact]
     public void Test01()

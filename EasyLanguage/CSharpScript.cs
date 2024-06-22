@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace ELang;
+namespace Global;
 public class CSharpScript
 {
     private ScriptOptions _opt;

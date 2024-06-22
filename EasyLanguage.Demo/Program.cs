@@ -157,6 +157,9 @@ static class Program
                 var intValue2 = host.cast(lib.System.Int32, eo[2]);
                 echo(intValue2, "intValue2");
                 """);
+            // expose entire assemblies
+            engine.AddHostObject("lib2", new HostTypeCollection(typeof(EasyObject).Assembly));
+            engine.Execute("lib2.Global.EasyObject.Echo('from lib2')");
         }
     }
 }

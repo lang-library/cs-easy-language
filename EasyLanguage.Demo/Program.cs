@@ -17,6 +17,12 @@ static class Program
     static void Main(string[] originalArgs)
     {
         ELang.ShowDetail = true;
+
+        string code = File.ReadAllText("assets/test.el");
+        var ast = ELang.FromCode(code);
+        Echo(ast, "ast");
+        System.Environment.Exit(0);
+
         var el1 = ELang.FromJson("""
             { "a": //line comment
               123

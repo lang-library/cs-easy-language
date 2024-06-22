@@ -68,6 +68,11 @@ public class ELang
     {
         return new CSharpEasyLanguageHandler(true, false).Parse(json);
     }
+    public static object FromCode(string code)
+    {
+        object obj = FromJson(code);
+        return TransformToAST(obj);
+    }
     public static object FromObject(object x)
     {
         // Microsoft.ClearScript.V8.V8ScriptItem+V8ScriptObject
@@ -121,5 +126,64 @@ public class ELang
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         internal static extern int MessageBoxW(
             IntPtr hWnd, string lpText, string lpCaption, uint uType);
+    }
+    public static object TransformToAST(object x)
+    {
+        if (x == null) return null;
+        else if (x is decimal)
+        {
+            return x;
+        }
+        else if (x is string)
+        {
+            var result = new Dictionary<string, object>();
+            result["!"] = "quote";
+            result["?"] = x;
+            return result;
+        }
+        else if (x is List<object> list)
+        {
+            var result = new List<object>();
+            foreach(var e in list)
+            {
+                result.Add(TransformToAST(e));
+            }
+            return result;
+        }
+        else if (x is Dictionary<string, object> dict)
+        {
+            if (dict.ContainsKey("!"))
+            {
+                var type = dict["!"];
+                if (type is string)
+                {
+                    switch (type)
+                    {
+                        case "deref":
+                            break;
+                        case "dot":
+                            return ".";
+                        case "symbol":
+                            return dict["?"];
+                        default:
+                            throw new Exception($"{type} is not expected");
+                    }
+                }
+                else
+                {
+                    throw new Exception($"type is string");
+                }
+            }
+            var result = new Dictionary<string, object>();
+            foreach (var key in dict.Keys)
+            {
+                result[key] = TransformToAST(dict[key]);
+            }
+            return result;
+        }
+        else
+        {
+            throw new Exception($"{FullName(x)} is not supported");
+        }
     }
 }

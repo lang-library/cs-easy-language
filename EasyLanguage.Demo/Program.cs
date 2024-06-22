@@ -21,6 +21,11 @@ static class Program
         string code = File.ReadAllText("assets/test.el");
         var ast = ELang.FromCode(code);
         Echo(ast, "ast");
+
+        using (var engine = ELangScript.CreateEngine())
+        {
+
+        }
         System.Environment.Exit(0);
 
         var el1 = ELang.FromJson("""

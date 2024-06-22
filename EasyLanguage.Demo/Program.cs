@@ -16,6 +16,7 @@ static class Program
     [STAThread]
     static void Main(string[] originalArgs)
     {
+        ELang.ShowDetail = true;
         var el1 = ELang.FromJson("""
             { "a": //line comment
               123
@@ -166,10 +167,33 @@ static class Program
                 }
                 var list = ELang.NewList(111, 222, 333);
                 echo2(list, "list");
+                echo2(ELang.FullName(eo));
+                echo2(ELang.FullName(list));
+                var map = { "a": 123, "b": "abc", c: [1, 2] };
+                echo2(map, "map");
+                //echo2(ELang.FullName(map), "ELang.FullName(map)");
+                var map2 = ELang.FromObject(map);
+                echo2(map2, "map2");
+                //echo2(ELang.FullName(map2), "ELang.FullName(map2)");
+                var ary = [1, 2, 3];
+                echo2(ary, "ary");
+                var ary2 = ELang.FromObject(ary);
+                echo2(ary2);
+                echo2(ELang.FullName(ary2[1]));
                 """);
             // expose entire assemblies
             engine.AddHostObject("lib2", new HostTypeCollection(typeof(ELang).Assembly));
             engine.Execute("lib2.Global.ELang.Echo('from lib2')");
+            engine.AddHostObject("alert", new Action<object>(o =>
+            {
+                Console.WriteLine("alert:{0}", o);
+            }));
+            engine.Execute("alert('from action')");
+            engine.AddHostObject("add2", new Func<int, int, int>((a, b) =>
+            {
+                return a + b;
+            }));
+            engine.Execute("echo2(add2(11, 22))");
         }
     }
 }

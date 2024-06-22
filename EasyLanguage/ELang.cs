@@ -4,6 +4,27 @@ using System.Runtime.InteropServices;
 
 namespace Global;
 
+internal class _ELangConverter : IObjectConverter
+{
+    public object ConvertResult(object x, string origTypeName)
+    {
+        string fullName = ELang.FullName(x);
+        if (origTypeName == "Microsoft.ClearScript.V8.V8ScriptItem+V8ScriptObject")
+        {
+            var result = new Dictionary<string, object>();
+            foreach (object o in (dynamic)x)
+            {
+                if (o is Dictionary<string, object> dict)
+                {
+                    result[(string)dict["Key"]] = dict["Value"];
+                }
+            }
+            return result;
+        }
+        return x;
+    }
+}
+
 public class ELang
 {
     public static bool DebugOutput = false;
@@ -15,7 +36,8 @@ public class ELang
     }
     public static object FromObject(object x)
     {
-        return new ObjectParser(false).Parse(x);
+        // Microsoft.ClearScript.V8.V8ScriptItem+V8ScriptObject
+        return new ObjectParser(false, new _ELangConverter()).Parse(x);
     }
     public static string ToJson(object x, bool indent = false)
     {

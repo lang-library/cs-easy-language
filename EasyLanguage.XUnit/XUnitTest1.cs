@@ -17,7 +17,7 @@ public class XUnitTest1
     [Fact]
     public void Test01()
     {
-        var el1 = EasyObject.FromJson("""
+        var el1 = ELang.FromJson("""
             { "a": //line comment
               123
               b.c.d: `(777 888) }
@@ -25,20 +25,20 @@ public class XUnitTest1
         Print(el1, "el1");
         Assert.Equal("""
             {"a":123,"b.c.d":["quote",[777,888]]}
-            """, el1.ToJson());
-        var el2 = EasyObject.FromJson("""
+            """, ELang.ToJson(el1));
+        var el2 = ELang.FromJson("""
             (add2 777 888) }
             """);
         Print(el2, "el2");
         Assert.Equal("""
             ["add2",777,888]
-            """, el2.ToJson());
-        var el3 = EasyObject.FromJson("""
+            """, ELang.ToJson(el2));
+        var el3 = ELang.FromJson("""
             @_.!$%&-=^~+*<>/?
             """);
         Print(el3, "el3");
         Assert.Equal("""
             "_.!$%&-=^~+*<>/?"
-            """, el3.ToJson());
+            """, ELang.ToJson(el3));
     }
 }

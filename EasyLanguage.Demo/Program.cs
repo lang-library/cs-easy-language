@@ -153,7 +153,9 @@ static class Program
                 echo(eo[1]);
                 var Int32T = host.type("System.Int32");
                 var intValue = host.cast(Int32T, eo[1]);
-                echo(intValue);
+                echo(intValue, "intValue");
+                var intValue2 = host.cast(lib.System.Int32, eo[2]);
+                echo(intValue2, "intValue2");
                 """);
         }
     }

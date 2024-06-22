@@ -92,7 +92,7 @@ static class Program
     ");
 
             // call a host method with an output parameter
-            engine.AddHostObject("host", new HostFunctions());
+            engine.AddHostObject("host", new ExtendedHostFunctions());
             engine.Execute(@"
         intVar = host.newVar(lib.System.Int32);
         found = dict.TryGetValue('foo', intVar.out);
@@ -150,7 +150,10 @@ static class Program
                 function echo(msg, title = null) { EasyObject.Echo(msg, title); }
                 EasyObject.Echo(eo, "eo");
                 EasyObject.Echo(eo[1], "eo[1]");
-                EasyObject.Echo(eo[1]);
+                echo(eo[1]);
+                var Int32T = host.type("System.Int32");
+                var intValue = host.cast(Int32T, eo[1]);
+                echo(intValue);
                 """);
         }
     }

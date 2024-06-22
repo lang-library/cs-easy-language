@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using Microsoft.ClearScript;
+using Microsoft.ClearScript.JavaScript;
+using Microsoft.ClearScript.V8;
 
 namespace Global;
 
@@ -8,16 +11,47 @@ internal class _ELangConverter : IObjectConverter
 {
     public object ConvertResult(object x, string origTypeName)
     {
+        //ELang.Echo(ELang.FullName(x));
+        //ELang.Echo(origTypeName);
         string fullName = ELang.FullName(x);
         if (origTypeName == "Microsoft.ClearScript.V8.V8ScriptItem+V8ScriptObject")
         {
+            //ELang.Echo("found");
+            //ELang.Echo(x);
+#if true
+            var result = new PropertyBag();
+            foreach (object o in (dynamic)x)
+            {
+                //ELang.Echo(ELang.FullName(o));
+                if (o is Microsoft.ClearScript.PropertyBag dict)
+                {
+                    ELang.Echo(dict["Key"]);
+                    //result[(string)dict["Key"]] = dict["Value"];
+                    result.Add((string)dict["Key"], dict["Value"]);
+                }
+            }
+            return result;
+#else
             var result = new Dictionary<string, object>();
             foreach (object o in (dynamic)x)
             {
-                if (o is Dictionary<string, object> dict)
+                //ELang.Echo(ELang.FullName(o));
+                if (o is Microsoft.ClearScript.PropertyBag dict)
                 {
-                    result[(string)dict["Key"]] = dict["Value"];
+                    ELang.Echo(dict["Key"]);
+                    result.Add((string)dict["Key"], dict["Value"]);
                 }
+            }
+            return result;
+#endif
+        }
+        else if (x is System.Collections.Generic.Dictionary<string, object> dict)
+        {
+            var result = new PropertyBag();
+            var keys = dict.Keys;
+            foreach (string key in keys)
+            {
+                result[key] = dict[key];
             }
             return result;
         }

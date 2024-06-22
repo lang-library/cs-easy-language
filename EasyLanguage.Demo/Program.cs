@@ -174,8 +174,9 @@ static class Program
                 //echo2(ELang.FullName(map), "ELang.FullName(map)");
                 var map2 = ELang.FromObject(map);
                 echo2(map2, "map2");
-                //echo2(ELang.FullName(map2), "ELang.FullName(map2)");
-                var ary = [1, 2, 3];
+                echo2(map2['c'], "map2['c']");
+                echo2(ELang.FullName(map2['c']), "ELang.FullName(map2['c'])");
+                                var ary = [1, 2, 3];
                 echo2(ary, "ary");
                 var ary2 = ELang.FromObject(ary);
                 echo2(ary2);
@@ -194,6 +195,8 @@ static class Program
                 return a + b;
             }));
             engine.Execute("echo2(add2(11, 22))");
+            engine.Execute("map2.c[1] = 777");
+            engine.Execute("echo2(map2)");
         }
     }
 }

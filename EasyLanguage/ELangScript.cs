@@ -15,6 +15,7 @@ public class ELangScript
     {
         var engine = new V8ScriptEngine();
         engine.AddHostObject("v8", engine);
+        engine.AddHostObject("host", new ExtendedHostFunctions());
         engine.AddHostObject("ELangAssembly", new HostTypeCollection(typeof(ELang).Assembly));
         engine.AddHostObject("Load", new Action<string>(path =>
         {
@@ -22,11 +23,13 @@ public class ELangScript
             engine.Execute(code);
         }));
         engine.Execute("""
+            globalThis.FullName = ELangAssembly.Global.ELang.FullName;
             globalThis.Echo = ELangAssembly.Global.ELang.Echo;
             globalThis.Log = ELangAssembly.Global.ELang.Log;
             globalThis.Message = ELangAssembly.Global.ELang.Message;
             globalThis.FromJson = ELangAssembly.Global.ELang.FromJson;
             globalThis.FromObject = ELangAssembly.Global.ELang.FromObject;
+            globalThis.ToJson = ELangAssembly.Global.ELang.ToJson;
             Load("assets/test.js");
             var map = FromObject({ a: 123 });
             Echo(map, "map");

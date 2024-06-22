@@ -24,7 +24,11 @@ static class Program
 
         using (var engine = ELangScript.CreateEngine())
         {
-
+            engine.AddHostObject("ast", ast);
+            var script = engine.Evaluate("""
+                transpile(ast);
+                """);
+            Echo(script, "script");
         }
         System.Environment.Exit(0);
 

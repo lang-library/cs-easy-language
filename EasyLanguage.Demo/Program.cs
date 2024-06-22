@@ -148,14 +148,15 @@ static class Program
             engine.AddHostObject("eo", eo);
             engine.Execute("""
                 function echo(msg, title = null) { EasyObject.Echo(msg, title); }
-                EasyObject.Echo(eo, "eo");
+                globalThis.echo2 = EasyObject.Echo;
+                                EasyObject.Echo(eo, "eo");
                 EasyObject.Echo(eo[1], "eo[1]");
                 echo(eo[1]);
                 var Int32T = host.type("System.Int32");
                 var intValue = host.cast(Int32T, eo[1]);
-                echo(intValue, "intValue");
+                echo2(intValue, "intValue");
                 var intValue2 = host.cast(lib.System.Int32, eo[2]);
-                echo(intValue2, "intValue2");
+                echo2(intValue2, "intValue2");
                 """);
             // expose entire assemblies
             engine.AddHostObject("lib2", new HostTypeCollection(typeof(EasyObject).Assembly));

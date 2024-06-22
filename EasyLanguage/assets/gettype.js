@@ -14,10 +14,21 @@ function gettype(x)
         case "Microsoft.ClearScript.PropertyBag": {
             if ('!' in x) {
                 Echo("contains!");
+                return gettype_for_special_bag(x);
             }
             return "bag";
         }
         default:
             throw new Error(`${fullName} is not supported`);
     }
+}
+
+function gettype_for_special_bag(x) {
+    return x['!'];
+    /*
+    switch (x['!']) {
+        default:
+            throw new Error(`${x['!']} is not supported`);
+    }
+    */
 }

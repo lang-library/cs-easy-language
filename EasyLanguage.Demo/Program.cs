@@ -22,14 +22,32 @@ static class Program
         var ast = ELang.FromCode(code);
         Echo(ast, "ast");
 
+#if true
         using (var engine = ELangScript.CreateEngine())
         {
+            engine.Execute("""
+            Load("assets/gettype.js");
+            Load("assets/test.js");
+            """);
             engine.AddHostObject("ast", ast);
             var script = engine.Evaluate("""
                 transpile(ast);
                 """);
             Echo(script, "script");
         }
+#else
+        using (var engine = JintScript.CreateEngine())
+        {
+            engine.Global.Set("ast", ast);
+            engine.Execute("""
+                load("assets/test.js");
+                """);
+            var script = engine.Evaluate("""
+                transpile(ast);
+                """);
+            Echo(script, "script");
+        }
+#endif
         System.Environment.Exit(0);
 
         var el1 = ELang.FromJson("""

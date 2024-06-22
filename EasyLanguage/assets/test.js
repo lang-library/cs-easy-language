@@ -2,8 +2,9 @@ Echo('this is test.js');
 
 function transpile(ast)
 {
-    var json = ToJson(ast);
-    ast = JSON.parse(json);
+    //var json = ToJson(ast);
+    //ast = JSON.parse(json);
+    ast = FromObject(ast);
     return transpileBody(ast);
 }
 
@@ -12,6 +13,11 @@ function transpileBody(ast)
     Echo(ast, "ast");
     Echo(typeof (ast));
     Echo(isArray(ast), "isArray(ast)")
+    Echo(gettype(ast), "gettype(ast)")
+    Echo(gettype(ast[0]), "gettype(ast[0])")
+    Echo(gettype(ast[3][1]), "gettype(ast[3][1])")
+    Echo(ast.length, "ast.length");
+    Echo(ast.Count, "ast.Count");
     return "dummy-script";
 }
 

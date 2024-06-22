@@ -15,34 +15,46 @@ public class JintScript
                 cfg.AllowClr(list[i]);
             }
         });
-        engine.SetValue("_globals", new JintScriptGlobal());
+        engine.SetValue("_globals", new JintScriptGlobal(engine));
         engine.Execute("""
-            var print = _globals.print;
+            var echot = _globals.echo;
             var log = _globals.log;
             var getenv = _globals.getenv;
             var appFile = _globals.appFile;
             var appDir = _globals.appDir;
+            var load = _globals.load;
             var $ns = importNamespace;
-            /*
-            function $ns(name)
-            {
-              return importNamespace(name);
-            }
-            */
-            
             """);
         return engine;
     }
 }
 internal class JintScriptGlobal
 {
-    public void print(dynamic x, string? title = null)
+    Jint.Engine engine = null;
+    public JintScriptGlobal(Jint.Engine engine)
+    {
+
+        this.engine = engine;
+    }
+    public void echo(dynamic x, string? title = null)
     {
         ELang.Echo(x, title);
     }
     public void log(dynamic x, string? title = null)
     {
         ELang.Log(x, title);
+    }
+    public object fromJson(string json)
+    {
+        return ELang.FromJson(json);
+    }
+    public string toJson(object x, bool indent = false)
+    {
+        return ELang.ToJson(x, indent);
+    }
+    public object fromObject(object x)
+    {
+        return ELang.FromObject(x);
     }
     public string getenv(string name)
     {
@@ -55,5 +67,10 @@ internal class JintScriptGlobal
     public string appDir()
     {
         return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+    }
+    public void load(string path)
+    {
+        string code = File.ReadAllText(path);
+        engine.Execute(code);
     }
 }

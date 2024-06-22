@@ -71,6 +71,7 @@ public class ELang
     public static object FromCode(string code)
     {
         object obj = FromJson(code);
+        Echo(obj);
         return TransformToAST(obj);
     }
     public static object FromObject(object x)
@@ -159,14 +160,15 @@ public class ELang
                 {
                     switch (type)
                     {
-                        case "deref":
-                            break;
+                        case "quote":
+                            return x;
                         case "dot":
                             return ".";
                         case "symbol":
                             return dict["?"];
                         default:
-                            throw new Exception($"{type} is not expected");
+                            //throw new Exception($"{type} is not expected");
+                            break;
                     }
                 }
                 else

@@ -142,7 +142,8 @@ static class Program
             Console.WriteLine(string.Join(", ", values.ToArray()));
 
             // EasyObject
-            engine.AddHostType("EasyObject", typeof(EasyObject));
+            //engine.AddHostType("EasyObject", typeof(EasyObject));
+            engine.AddHostType(typeof(EasyObject));
             var eo = EasyObject.FromObject(new []  { 1, 2, 3 });
             engine.AddHostObject("eo", eo);
             engine.Execute("""

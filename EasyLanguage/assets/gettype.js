@@ -3,7 +3,7 @@ Echo('this is gettype.js');
 function gettype(x)
 {
     let fullName = FullName(x);
-    Echo(fullName);
+    //Echo(fullName);
     switch (fullName) {
         case "System.String":
             return "string";
@@ -13,7 +13,7 @@ function gettype(x)
             return "list";
         case "Microsoft.ClearScript.PropertyBag": {
             if ('!' in x) {
-                Echo("contains!");
+                //Echo("contains!");
                 return gettype_for_special_bag(x);
             }
             return "bag";

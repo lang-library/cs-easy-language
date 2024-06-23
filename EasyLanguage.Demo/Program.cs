@@ -7,6 +7,7 @@ using Microsoft.ClearScript.JavaScript;
 using Microsoft.ClearScript.V8;
 using System.ComponentModel;
 using System.Web.UI;
+using System.Text;
 
 namespace Main;
 
@@ -30,6 +31,7 @@ static class Program
             Load("assets/test.js");
             """);
             engine.AddHostObject("ast", ast);
+            engine.AddHostType(typeof(StringBuilder));
             var script = engine.Evaluate("""
                 transpile(ast);
                 """);

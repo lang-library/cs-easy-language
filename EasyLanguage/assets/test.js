@@ -44,13 +44,18 @@ function transpileFunCall(ast, sb) {
     Echo(first, "first");
     first = transpieFunName(first);
     Echo(first, "first");
+    if (first in funcList) {
+        funcList[first](ast, sb);
+        return;
+    }
     sb.Append(first);
     sb.Append("(");
     for (let i = 1; i < ast.Count; i++) {
+        if (i > 1) sb.Append(",");
         transpileBody(ast[i], sb);
     }
     sb.Append(")");
-    sb.Append(";");
+    //sb.Append(";");
 }
 
 function transpieFunName(ast, sb) {
@@ -61,13 +66,27 @@ function transpieFunName(ast, sb) {
         let first = ast[0];
         Echo(first, "first(dot notation)");
         let result = "";
-        for (let i = 0; i < ast.Count; i++) {
-            if (i > 0) result += ".";
+        for (let i = 1; i < ast.Count; i++) {
+            if (i > 1) result += ".";
             result += ast[i];
         }
         return result;
     }
 }
+
+var funcList = {
+    "program": function (ast, sb) {
+        for (let i = 1; i < ast.Count; i++) {
+            transpileBody(ast[i], sb);
+            sb.Append(";");
+        }
+    },
+    "define": function (ast, sb) {
+        sb.Append(ast[1]);
+        sb.Append("=");
+        transpileBody(ast[2], sb);
+    }
+};
 
 function isArray(value) {
     //var V8ArrayeT = host.type("Microsoft.ClearScript.V8.V8ScriptItem.V8Arraye");

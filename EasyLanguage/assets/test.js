@@ -2,6 +2,7 @@ Echo('this is test.js');
 
 function transpile(ast)
 {
+    Echo(globalThis['JSON'].stringify(11));
     ast = FromObject(ast);
     var sb = new StringBuilder();
     transpileBody(ast, sb);
@@ -14,6 +15,15 @@ function transpileBody(ast, sb)
     let type = gettype(ast);
     Echo(type, "type");
     switch (type) {
+        case "number":
+            sb.Append(ast);
+            return;
+        case "string":
+            sb.Append(ast);
+            return;
+        case "quote":
+            sb.Append(JSON.stringify(ast["?"]));
+            return;
         case "list":
             transpileList(ast, sb);
             return;
@@ -27,7 +37,6 @@ function transpileList(ast, sb) {
     Echo(ast.Count);
     if (ast.Count == 0) throw new Error("list length is 0");
     transpileFunCall(ast, sb);
-    sb.Append("<<list>>");
 }
 
 function transpileFunCall(ast, sb) {
@@ -35,6 +44,13 @@ function transpileFunCall(ast, sb) {
     Echo(first, "first");
     first = transpieFunName(first);
     Echo(first, "first");
+    sb.Append(first);
+    sb.Append("(");
+    for (let i = 1; i < ast.Count; i++) {
+        transpileBody(ast[i], sb);
+    }
+    sb.Append(")");
+    sb.Append(";");
 }
 
 function transpieFunName(ast, sb) {
@@ -46,6 +62,7 @@ function transpieFunName(ast, sb) {
         Echo(first, "first(dot notation)");
         let result = "";
         for (let i = 0; i < ast.Count; i++) {
+            if (i > 0) result += ".";
             result += ast[i];
         }
         return result;

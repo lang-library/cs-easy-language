@@ -5,6 +5,8 @@ function gettype(x)
     let fullName = FullName(x);
     //Echo(fullName);
     switch (fullName) {
+        case "System.Int32":
+            return "number";
         case "System.String":
             return "string";
         case "Microsoft.ClearScript.V8.V8ScriptItem+V8Array":
@@ -19,7 +21,7 @@ function gettype(x)
             return "bag";
         }
         default:
-            throw new Error(`${fullName} is not supported`);
+            throw new Error(`gettype(): ${fullName} is not supported`);
     }
 }
 

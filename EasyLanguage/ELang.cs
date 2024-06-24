@@ -160,6 +160,8 @@ public class ELang
                 {
                     switch (type)
                     {
+                        case "as-is":
+                            return x;
                         case "quote":
                             return x;
                         case "dot":

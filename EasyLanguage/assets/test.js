@@ -21,6 +21,9 @@ function transpileBody(ast, sb)
         case "string":
             sb.Append(ast);
             return;
+        case "as-is":
+            sb.Append(ast["?"].trim());
+            return;
         case "quote":
             sb.Append(JSON.stringify(ast["?"]));
             return;

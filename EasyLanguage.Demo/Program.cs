@@ -37,7 +37,9 @@ static class Program
                 transpile(ast);
                 """);
             Echo(script, "script");
-            engine.Execute(script);
+            var output = engine.Evaluate(script);
+            Echo(output, "output");
+            Echo(FromObject(output), "output");
         }
 #else
         using (var engine = JintScript.CreateEngine())

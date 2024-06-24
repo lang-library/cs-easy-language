@@ -6,4 +6,6 @@
  $ Echo("as-is$$") $
  (define map {a: (add 11 22) b: $33+44$})
  $ Echo(map) $
+ #sum
+ $ undefined $
  )

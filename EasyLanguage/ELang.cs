@@ -14,7 +14,20 @@ internal class _ELangConverter : IObjectConverter
         //ELang.Echo(ELang.FullName(x));
         //ELang.Echo(origTypeName);
         string fullName = ELang.FullName(x);
-        if (origTypeName == "Microsoft.ClearScript.V8.V8ScriptItem+V8ScriptObject")
+        //Microsoft.ClearScript.Undefined
+        if (origTypeName == "Microsoft.ClearScript.Undefined")
+        {
+            var result = new PropertyBag();
+            result["!"] = "undefined";
+            return result;
+        }
+        else if (origTypeName == "Microsoft.ClearScript.VoidResult")
+        {
+            var result = new PropertyBag();
+            result["!"] = "void";
+            return result;
+        }
+        else if (origTypeName == "Microsoft.ClearScript.V8.V8ScriptItem+V8ScriptObject")
         {
             //ELang.Echo("found");
             //ELang.Echo(x);

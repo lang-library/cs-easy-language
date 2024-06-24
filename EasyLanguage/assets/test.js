@@ -27,6 +27,9 @@ function transpileBody(ast, sb)
         case "quote":
             sb.Append(JSON.stringify(ast["?"]));
             return;
+        case "bag":
+            transpileBag(ast, sb);
+            return;
         case "list":
             transpileList(ast, sb);
             return;
@@ -34,6 +37,21 @@ function transpileBody(ast, sb)
             throw new Error(`type:${type} is not supported`);
     }
     return "dummy-script";
+}
+
+function transpileBag(ast, sb) {
+    sb.Append("{");
+    for(x of ast) {
+        Echo(x, "x");
+        Echo(x["Key"], "key");
+        Echo(x["Value"], "value");
+        let key = x["Key"];
+        let val = x["Value"];
+        sb.Append(JSON.stringify(key));
+        sb.Append(":");
+        transpileBody(val, sb);
+    }
+    sb.Append("}");
 }
 
 function transpileList(ast, sb) {

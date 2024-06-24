@@ -4,4 +4,6 @@
  ([. Console WriteLine] sum)
  (Echo '"hello")
  $ Echo("as-is$$") $
+ (define map {a: (add 11 22)})
+ $ Echo(map) $
  )

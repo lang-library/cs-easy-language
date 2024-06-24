@@ -41,15 +41,15 @@ function transpileBody(ast, sb)
 
 function transpileBag(ast, sb) {
     sb.Append("{");
-    for(x of ast) {
-        Echo(x, "x");
-        Echo(x["Key"], "key");
-        Echo(x["Value"], "value");
+    let i = 0;
+    for (x of ast) {
+        if (i > 0) sb.Append(",");
         let key = x["Key"];
         let val = x["Value"];
         sb.Append(JSON.stringify(key));
         sb.Append(":");
         transpileBody(val, sb);
+        i++;
     }
     sb.Append("}");
 }

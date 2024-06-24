@@ -88,3 +88,7 @@ var funcList = {
         transpileBody(ast[2], sb);
     }
 };
+
+function add(a, b) {
+    return a + b;
+}

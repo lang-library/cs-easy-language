@@ -32,10 +32,12 @@ static class Program
             """);
             engine.AddHostObject("ast", ast);
             engine.AddHostType(typeof(StringBuilder));
-            var script = engine.Evaluate("""
+            engine.AddHostType(typeof(Console));
+            string script = (string)engine.Evaluate("""
                 transpile(ast);
                 """);
             Echo(script, "script");
+            engine.Execute(script);
         }
 #else
         using (var engine = JintScript.CreateEngine())

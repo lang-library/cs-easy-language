@@ -20,7 +20,7 @@ static class Program
         ELang.ShowDetail = true;
 
         string code = File.ReadAllText("assets/test.el");
-        var ast = ELang2.FromCode(code);
+        var ast = ELang.FromCode(code);
         Echo(ast, "ast");
 
 #if true
@@ -86,15 +86,13 @@ static class Program
         Echo(el3, "el3");
         var elang = new EasyLanguage();
 #if false
-        var ans01 = elang.EvalString("""
+        var ans01 = ELang2.EvalString("""
             (@+ 11 22)
             """);
         Echo(ans01, "ans01");
-#endif
-        var ans02 = elang.EvalFile("assets/test.elAng");
+        var ans02 = ELang2.EvalFile("assets/test.elAng");
         Echo(ans02, "ans02");
-#if false
-        var csharp = new ELang.CSharpScript();
+        var csharp = new ELang2.CSharpScript();
         var answer = csharp.Evaluate("11+22");
         Echo(answer, "answer");
 #endif
@@ -197,10 +195,10 @@ static class Program
             var eo = Global.ELang.FromObject(new []  { 1, 2, 3 });
             engine.AddHostObject("eo", eo);
             engine.Execute("""
-                function echo(msg, title = null) { ELang.Echo(msg, title); }
-                globalThis.echo2 = ELang.Echo;
-                ELang.Echo(eo, "eo");
-                ELang.Echo(eo[1], "eo[1]");
+                function echo(msg, title = null) { ELang2.Echo(msg, title); }
+                globalThis.echo2 = ELang2.Echo;
+                ELang2.Echo(eo, "eo");
+                ELang2.Echo(eo[1], "eo[1]");
                 echo(eo[1]);
                 var Int32T = host.type("System.Int32");
                 var intValue = host.cast(Int32T, eo[1]);
@@ -211,26 +209,26 @@ static class Program
                 {
                   echo2(eo[i], "eo[i]");
                 }
-                var list = ELang.NewList(111, 222, 333);
+                var list = ELang2.NewList(111, 222, 333);
                 echo2(list, "list");
-                echo2(ELang.FullName(eo));
-                echo2(ELang.FullName(list));
+                echo2(ELang2.FullName(eo));
+                echo2(ELang2.FullName(list));
                 var map = { "a": 123, "b": "abc", c: [1, 2] };
                 echo2(map, "map");
-                //echo2(ELang.FullName(map), "ELang.FullName(map)");
-                var map2 = ELang.FromObject(map);
+                //echo2(ELang2.FullName(map), "ELang2.FullName(map)");
+                var map2 = ELang2.FromObject(map);
                 echo2(map2, "map2");
                 echo2(map2['c'], "map2['c']");
-                echo2(ELang.FullName(map2['c']), "ELang.FullName(map2['c'])");
+                echo2(ELang2.FullName(map2['c']), "ELang2.FullName(map2['c'])");
                                 var ary = [1, 2, 3];
                 echo2(ary, "ary");
-                var ary2 = ELang.FromObject(ary);
+                var ary2 = ELang2.FromObject(ary);
                 echo2(ary2);
-                echo2(ELang.FullName(ary2[1]));
+                echo2(ELang2.FullName(ary2[1]));
                 """);
             // expose entire assemblies
             engine.AddHostObject("lib2", new HostTypeCollection(typeof(ELang).Assembly));
-            engine.Execute("lib2.Global.ELang.Echo('from lib2')");
+            engine.Execute("lib2.Global.ELang2.Echo('from lib2')");
             engine.AddHostObject("alert", new Action<object>(o =>
             {
                 Console.WriteLine("alert:{0}", o);

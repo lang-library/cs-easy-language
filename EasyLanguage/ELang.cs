@@ -1,76 +1,13 @@
-﻿using System;
+﻿using Esprima.Ast;
+using Jint.Native.Function;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using Microsoft.ClearScript;
-using Microsoft.ClearScript.JavaScript;
-using Microsoft.ClearScript.V8;
+using System.Text;
+using static Global.ELang;
 
 namespace Global;
-
-internal class _ELangConverter : IObjectConverter
-{
-    public object ConvertResult(object x, string origTypeName)
-    {
-        //ELang.Echo(ELang.FullName(x));
-        //ELang.Echo(origTypeName);
-        string fullName = ELang.FullName(x);
-        //Microsoft.ClearScript.Undefined
-        if (origTypeName == "Microsoft.ClearScript.Undefined")
-        {
-            var result = new PropertyBag();
-            result["!"] = "undefined";
-            return result;
-        }
-        else if (origTypeName == "Microsoft.ClearScript.VoidResult")
-        {
-            var result = new PropertyBag();
-            result["!"] = "void";
-            return result;
-        }
-        else if (origTypeName == "Microsoft.ClearScript.V8.V8ScriptItem+V8ScriptObject")
-        {
-            //ELang.Echo("found");
-            //ELang.Echo(x);
-#if true
-            var result = new PropertyBag();
-            foreach (object o in (dynamic)x)
-            {
-                //ELang.Echo(ELang.FullName(o));
-                if (o is Microsoft.ClearScript.PropertyBag dict)
-                {
-                    ELang.Echo(dict["Key"]);
-                    //result[(string)dict["Key"]] = dict["Value"];
-                    result.Add((string)dict["Key"], dict["Value"]);
-                }
-            }
-            return result;
-#else
-            var result = new Dictionary<string, object>();
-            foreach (object o in (dynamic)x)
-            {
-                //ELang.Echo(ELang.FullName(o));
-                if (o is Microsoft.ClearScript.PropertyBag dict)
-                {
-                    ELang.Echo(dict["Key"]);
-                    result.Add((string)dict["Key"], dict["Value"]);
-                }
-            }
-            return result;
-#endif
-        }
-        else if (x is System.Collections.Generic.Dictionary<string, object> dict)
-        {
-            var result = new PropertyBag();
-            var keys = dict.Keys;
-            foreach (string key in keys)
-            {
-                result[key] = dict[key];
-            }
-            return result;
-        }
-        return x;
-    }
-}
 
 public class ELang
 {
@@ -85,12 +22,11 @@ public class ELang
     {
         object obj = FromJson(code);
         Echo(obj);
-        return TransformToAST(obj);
+        return ToAST(obj);
     }
     public static object FromObject(object x)
     {
-        // Microsoft.ClearScript.V8.V8ScriptItem+V8ScriptObject
-        return new ObjectParser(false, new _ELangConverter()).Parse(x);
+        return new ObjectParser(false).Parse(x);
     }
     public static string ToJson(object x, bool indent = false)
     {
@@ -141,7 +77,7 @@ public class ELang
         internal static extern int MessageBoxW(
             IntPtr hWnd, string lpText, string lpCaption, uint uType);
     }
-    public static object TransformToAST(object x)
+    protected static object ToAST(object x)
     {
         if (x == null) return null;
         else if (x is decimal)
@@ -158,9 +94,9 @@ public class ELang
         else if (x is List<object> list)
         {
             var result = new List<object>();
-            foreach(var e in list)
+            foreach (var e in list)
             {
-                result.Add(TransformToAST(e));
+                result.Add(ToAST(e));
             }
             return result;
         }
@@ -194,7 +130,7 @@ public class ELang
             var result = new Dictionary<string, object>();
             foreach (var key in dict.Keys)
             {
-                result[key] = TransformToAST(dict[key]);
+                result[key] = ToAST(dict[key]);
             }
             return result;
         }
@@ -204,3 +140,166 @@ public class ELang
         }
     }
 }
+
+public class ELang2Transform
+{
+    public static string gettype(object x)
+    {
+        string fullName = FullName(x);
+        if (
+            (x is System.Int32)
+            ||
+            (x is System.Double)
+            )
+        {
+            return "number";
+        }
+        else if (x is System.String)
+        {
+            return "string";
+        }
+        else if (x is List<object> list)
+        {
+            return "list";
+        }
+        else if (x is Dictionary<string, object> dict)
+        {
+            if (dict.ContainsKey("!"))
+                return gettype_for_special_bag(x);
+            return "dict";
+        }
+        else
+        {
+            throw new Exception($"gettype(): {fullName} is not supported");
+        }
+    }
+    static string gettype_for_special_bag(dynamic x)
+    {
+        return x["!"];
+    }
+    public static string transpile(dynamic ast)
+    {
+        ast = FromObject(ast);
+        var sb = new StringBuilder();
+        transpileBody(ast, sb);
+        return sb.ToString();
+    }
+
+    static void transpileBody(dynamic ast, StringBuilder sb)
+    {
+        Echo(ast, "ast");
+        string type = gettype(ast);
+        Echo(type, "type");
+        switch (type)
+        {
+            case "number":
+                sb.Append(ast);
+                return;
+            case "string":
+                sb.Append(ast);
+                return;
+            case "as-is":
+                sb.Append(ast["?"].Trim());
+                return;
+            case "quote":
+                sb.Append(new ObjectParser(false).Stringify(ast["?"], false));
+                return;
+#if true
+            case "dict":
+                transpileBag(ast, sb);
+                return;
+            case "list":
+                transpileList(ast, sb);
+                return;
+#endif
+            default:
+                throw new Exception($"type:{type} is not supported");
+        }
+    }
+
+    static void transpileBag(dynamic ast, StringBuilder sb)
+    {
+        sb.Append("{");
+        int i = 0;
+        foreach (var x in ast)
+        {
+            if (i > 0) sb.Append(",");
+            string key = (string)x.Key;
+            dynamic val = x.Value;
+            sb.Append(new ObjectParser(false).Stringify(key, false));
+            sb.Append(":");
+            transpileBody(val, sb);
+            i++;
+        }
+        sb.Append("}");
+    }
+
+    static void transpileList(dynamic ast, StringBuilder sb)
+    {
+        Echo(ast.Count);
+        if (ast.Count == 0) throw new Exception("list length is 0");
+        transpileFunCall(ast, sb);
+    }
+
+    static void transpileFunCall(dynamic ast, StringBuilder sb)
+    {
+        dynamic first = ast[0];
+        Echo(first, "first");
+        first = transpieFunName(first);
+        Echo(first, "first");
+        if (funcList.ContainsKey(first))
+        {
+            funcList[first](ast, sb);
+            return;
+        }
+        sb.Append(first);
+        sb.Append("(");
+        for (int i = 1; i < ast.Count; i++)
+        {
+            if (i > 1) sb.Append(",");
+            transpileBody(ast[i], sb);
+        }
+        sb.Append(")");
+    }
+
+    static string transpieFunName(dynamic ast)
+    {
+        string type = gettype(ast);
+        if (type == "string") return ast;
+        if (type == "list")
+        {
+            if (ast.Count == 0) throw new Exception("dot notation length is 0");
+            string first = ast[0];
+            Echo(first, "first(dot notation)");
+            string result = "";
+            for (int i = 1; i < ast.Count; i++)
+            {
+                if (i > 1) result += ".";
+                result += ast[i];
+            }
+            return result;
+        }
+        throw new Exception($"transpieFunName(): type {type} not expected");
+    }
+
+    delegate dynamic TranspilerFunction(dynamic ast, StringBuilder sb);
+    static Dictionary<string, TranspilerFunction> funcList = new Dictionary<string, TranspilerFunction>()
+        {
+        {"program", (dynamic ast, StringBuilder sb) => {
+            for (int i = 1; i<ast.Count; i++) {
+                transpileBody(ast[i], sb);
+                sb.Append(";");
+            }
+            return null;
+        }},
+        {"define",  (dynamic ast, StringBuilder sb) => {
+            sb.Append("var ");
+            sb.Append(ast[1]);
+            sb.Append("=");
+            transpileBody(ast[2], sb);
+            return null;
+        }
+        }
+    };
+
+};

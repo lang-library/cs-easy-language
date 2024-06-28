@@ -94,25 +94,17 @@ public class Elang1Test1
     public void Test07()
     {
         var o1 = Global.EasyLanguageParser.Parse("""
-            ?(d)
+            ?𠀋
             """);
         string json1 = new ObjectParser().Stringify(o1, false);
         Print(json1, "json1");
         Assert.Equal("""
-            {"!":"deref","?":[{"!":"symbol","?":"d"}]}
+            {"!":"char","?":"𠀋"}
             """, json1);
     }
     [Fact]
     public void Test08()
     {
-        var o1 = Global.EasyLanguageParser.Parse("""
-            ^{"a": 1} [1 2 3]
-            """);
-        string json1 = new ObjectParser().Stringify(o1, false);
-        Print(json1, "json1");
-        Assert.Equal("""
-            {"!":"metadata","?meta":{"a":1},"?data":[1,2,3]}
-            """, json1);
     }
     [Fact]
     public void Test09()

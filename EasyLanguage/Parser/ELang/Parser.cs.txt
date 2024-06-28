@@ -164,10 +164,9 @@ namespace Global.Parser.ELang {
       else if (rulename.ToLower().Equals("member-name".ToLower())) rule = Rule_member_name.Parse(context);
       else if (rulename.ToLower().Equals("array".ToLower())) rule = Rule_array.Parse(context);
       else if (rulename.ToLower().Equals("vector".ToLower())) rule = Rule_vector.Parse(context);
+      else if (rulename.ToLower().Equals("char".ToLower())) rule = Rule_char.Parse(context);
       else if (rulename.ToLower().Equals("quote".ToLower())) rule = Rule_quote.Parse(context);
       else if (rulename.ToLower().Equals("unquote".ToLower())) rule = Rule_unquote.Parse(context);
-      else if (rulename.ToLower().Equals("deref".ToLower())) rule = Rule_deref.Parse(context);
-      else if (rulename.ToLower().Equals("metadata".ToLower())) rule = Rule_metadata.Parse(context);
       else if (rulename.ToLower().Equals("as-is".ToLower())) rule = Rule_as_is.Parse(context);
       else if (rulename.ToLower().Equals("number".ToLower())) rule = Rule_number.Parse(context);
       else if (rulename.ToLower().Equals("decimal-point".ToLower())) rule = Rule_decimal_point.Parse(context);

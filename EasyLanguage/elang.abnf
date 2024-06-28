@@ -14,12 +14,9 @@ end-vector      = ws ("]" / ")") ws;  #; ] right square bracket
 
 end-object      = ws "}" ws;  #; } right curly bracket
 
-#end-slot       = ws ">" ws;
+name-separator  = ws ":" ws;  #; : colon
 
-name-separator  = ws %x3A ws;  #; : colon
-
-#value-separator = ws %x2C ws;  #; , comma
-value-separator = (ws %x2C ws) / ws;  #; , comma
+value-separator = (ws "," ws) / ws;  #; , comma
 
 ws = *(
 	%x20 /              #; Space
@@ -35,8 +32,8 @@ comment = "/*" inmlcomment "*/";
 inslcomment = *( %x01-09 / %x0B / %x0C / %x0E-FFFFFFFF );
 inmlcomment = *( %x01-29 / %x2B-FFFFFFFF / ( %x2A ( %x01-2E / %x30-FFFFFFFF ) ) );
 
-#value = false / null / true / object / array / number / string / quote / slot;
-value = false / null / true / object / array / number / string / lisp-symbol / vector / quote / unquote / deref / metadata / as-is;
+#value = false / null / true / object / array / number / string / lisp-symbol / vector / quote / unquote / deref / metadata / as-is;
+value = false / null / true / object / array / number / string / lisp-symbol / vector / char / quote / unquote / as-is;
 
 false = %x66.61.6c.73.65;   #; false
 
@@ -55,14 +52,16 @@ array = begin-array [ value *( value-separator value ) ] end-array;
 
 vector = begin-vector [ value *( value-separator value ) ] end-vector;
 
+#char = "?" %x00-FFFFFFFF;
+char = ( "?" %x00-7F ) / ( "?" %x80-FFFFFFFF *( %x80-FFFFFFFF ) );
+
 quote = ("'" / "`") value;
 
 unquote =  ( "~@" value ) / ( "~" value );
 
-#deref =  ( "@" value );
-deref =  ( "?" value );
+#deref =  ( "?" value );
 
-metadata =  ( "^" ws value ws value );
+#metadata =  ( "^" ws value ws value );
 
 #as-is = "$@" *( "@@" / ( %x00-3F / %x41-FFFFFFFF ) ) "@";
 as-is = "@" *( "@@" / ( %x00-3F / %x41-FFFFFFFF ) ) "@";

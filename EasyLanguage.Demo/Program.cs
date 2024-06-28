@@ -19,6 +19,12 @@ static class Program
     {
         ELang.ShowDetail = true;
 
+        string ss = "𠀋";
+        Echo(ss.Length);
+        Echo((uint)ss[0]);
+        Echo((uint)ss[1]);
+        Environment.Exit(0);
+
         string code = File.ReadAllText("assets/test.el");
         var ast = ELang.FromCode(code);
         Echo(ast, "ast");

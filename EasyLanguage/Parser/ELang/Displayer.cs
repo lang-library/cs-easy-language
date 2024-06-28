@@ -121,22 +121,17 @@ namespace Global.Parser.ELang {
       return VisitRules(rule.rules);
     }
 
+    public Object Visit(Rule_char rule)
+    {
+      return VisitRules(rule.rules);
+    }
+
     public Object Visit(Rule_quote rule)
     {
       return VisitRules(rule.rules);
     }
 
     public Object Visit(Rule_unquote rule)
-    {
-      return VisitRules(rule.rules);
-    }
-
-    public Object Visit(Rule_deref rule)
-    {
-      return VisitRules(rule.rules);
-    }
-
-    public Object Visit(Rule_metadata rule)
     {
       return VisitRules(rule.rules);
     }

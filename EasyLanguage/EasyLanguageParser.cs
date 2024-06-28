@@ -261,6 +261,19 @@ public class EasyLanguageParser
             result["?"] = RuleToObject(rules[1], NumberAsDecimal);
             return result;
         }
+        else if (rule is Rule_char)
+        {
+            var result = new Dictionary<string, object>();
+            result["!"] = "char";
+            string spell = "";
+            for (int i = 1; i<rules.Count; i++)
+            {
+                spell += rules[i].spelling;
+            }
+            result["?"] = spell;
+            return result;
+        }
+#if false
         else if (rule is Rule_deref)
         {
             var result = new Dictionary<string, object>();
@@ -276,6 +289,7 @@ public class EasyLanguageParser
             result["?data"] = RuleToObject(rules[2], NumberAsDecimal);
             return result;
         }
+#endif
         else if (rule is Rule_as_is)
         {
             var result = new Dictionary<string, object>();

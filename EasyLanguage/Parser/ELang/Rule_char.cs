@@ -3,9 +3,9 @@ namespace Global.Parser.ELang {
   using System;
   using System.Collections.Generic;
 
-  sealed public class Rule_metadata:Rule
+  sealed public class Rule_char:Rule
   {
-    private Rule_metadata(String spelling, List<Rule> rules) :
+    private Rule_char(String spelling, List<Rule> rules) :
     base(spelling, rules)
     {
     }
@@ -15,9 +15,9 @@ namespace Global.Parser.ELang {
       return visitor.Visit(this);
     }
 
-    public static Rule_metadata Parse(ParserContext context)
+    public static Rule_char Parse(ParserContext context)
     {
-      context.Push("metadata");
+      context.Push("char");
 
       Rule rule;
       bool parsed = true;
@@ -50,7 +50,7 @@ namespace Global.Parser.ELang {
                 int c2 = 0;
                 for (int i2 = 0; i2 < 1 && f2; i2++)
                 {
-                  rule = Terminal_StringValue.Parse(context, "^");
+                  rule = Terminal_StringValue.Parse(context, "?");
                   if ((f2 = rule != null))
                   {
                     a2.Add(rule, context.index);
@@ -65,7 +65,66 @@ namespace Global.Parser.ELang {
                 int c2 = 0;
                 for (int i2 = 0; i2 < 1 && f2; i2++)
                 {
-                  rule = Rule_ws.Parse(context);
+                  rule = Terminal_NumericValue.Parse(context, "%x00-7F", "[\\x00-\\x7F]", 1);
+                  if ((f2 = rule != null))
+                  {
+                    a2.Add(rule, context.index);
+                    c2++;
+                  }
+                }
+                parsed = c2 == 1;
+              }
+              if (parsed)
+              {
+                as2.Add(a2);
+              }
+              context.index = s2;
+            }
+
+            b = ParserAlternative.GetBest(as2);
+
+            parsed = b != null;
+
+            if (parsed)
+            {
+              a1.Add(b.rules, b.end);
+              context.index = b.end;
+            }
+            f1 = context.index > g1;
+            if (parsed) c1++;
+          }
+          parsed = c1 == 1;
+        }
+        if (parsed)
+        {
+          as1.Add(a1);
+        }
+        context.index = s1;
+      }
+      {
+        int s1 = context.index;
+        ParserAlternative a1 = new ParserAlternative(s1);
+        parsed = true;
+        if (parsed)
+        {
+          bool f1 = true;
+          int c1 = 0;
+          for (int i1 = 0; i1 < 1 && f1; i1++)
+          {
+            int g1 = context.index;
+            List<ParserAlternative> as2 = new List<ParserAlternative>();
+            parsed = false;
+            {
+              int s2 = context.index;
+              ParserAlternative a2 = new ParserAlternative(s2);
+              parsed = true;
+              if (parsed)
+              {
+                bool f2 = true;
+                int c2 = 0;
+                for (int i2 = 0; i2 < 1 && f2; i2++)
+                {
+                  rule = Terminal_StringValue.Parse(context, "?");
                   if ((f2 = rule != null))
                   {
                     a2.Add(rule, context.index);
@@ -80,7 +139,7 @@ namespace Global.Parser.ELang {
                 int c2 = 0;
                 for (int i2 = 0; i2 < 1 && f2; i2++)
                 {
-                  rule = Rule_value.Parse(context);
+                  rule = Terminal_NumericValue.Parse(context, "%x80-FFFFFFFF", "[\\x80-\\uFFFFFFFF]", 1);
                   if ((f2 = rule != null))
                   {
                     a2.Add(rule, context.index);
@@ -93,31 +152,50 @@ namespace Global.Parser.ELang {
               {
                 bool f2 = true;
                 int c2 = 0;
-                for (int i2 = 0; i2 < 1 && f2; i2++)
+                while (f2)
                 {
-                  rule = Rule_ws.Parse(context);
-                  if ((f2 = rule != null))
+                  int g2 = context.index;
+                  List<ParserAlternative> as3 = new List<ParserAlternative>();
+                  parsed = false;
                   {
-                    a2.Add(rule, context.index);
-                    c2++;
+                    int s3 = context.index;
+                    ParserAlternative a3 = new ParserAlternative(s3);
+                    parsed = true;
+                    if (parsed)
+                    {
+                      bool f3 = true;
+                      int c3 = 0;
+                      for (int i3 = 0; i3 < 1 && f3; i3++)
+                      {
+                        rule = Terminal_NumericValue.Parse(context, "%x80-FFFFFFFF", "[\\x80-\\uFFFFFFFF]", 1);
+                        if ((f3 = rule != null))
+                        {
+                          a3.Add(rule, context.index);
+                          c3++;
+                        }
+                      }
+                      parsed = c3 == 1;
+                    }
+                    if (parsed)
+                    {
+                      as3.Add(a3);
+                    }
+                    context.index = s3;
                   }
-                }
-                parsed = c2 == 1;
-              }
-              if (parsed)
-              {
-                bool f2 = true;
-                int c2 = 0;
-                for (int i2 = 0; i2 < 1 && f2; i2++)
-                {
-                  rule = Rule_value.Parse(context);
-                  if ((f2 = rule != null))
+
+                  b = ParserAlternative.GetBest(as3);
+
+                  parsed = b != null;
+
+                  if (parsed)
                   {
-                    a2.Add(rule, context.index);
-                    c2++;
+                    a2.Add(b.rules, b.end);
+                    context.index = b.end;
                   }
+                  f2 = context.index > g2;
+                  if (parsed) c2++;
                 }
-                parsed = c2 == 1;
+                parsed = true;
               }
               if (parsed)
               {
@@ -160,16 +238,16 @@ namespace Global.Parser.ELang {
       rule = null;
       if (parsed)
       {
-          rule = new Rule_metadata(context.text.Substring(a0.start, a0.end - a0.start), a0.rules);
+          rule = new Rule_char(context.text.Substring(a0.start, a0.end - a0.start), a0.rules);
       }
       else
       {
           context.index = s0;
       }
 
-      context.Pop("metadata", parsed);
+      context.Pop("char", parsed);
 
-      return (Rule_metadata)rule;
+      return (Rule_char)rule;
     }
   }
 }

@@ -52,7 +52,7 @@ namespace Global.Parser.ELang {
           int c1 = 0;
           for (int i1 = 0; i1 < 1 && f1; i1++)
           {
-            rule = Terminal_NumericValue.Parse(context, "%x3A", "[\\x3A]", 1);
+            rule = Terminal_StringValue.Parse(context, ":");
             if ((f1 = rule != null))
             {
               a1.Add(rule, context.index);

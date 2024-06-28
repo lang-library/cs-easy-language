@@ -65,7 +65,7 @@ namespace Global.Parser.ELang {
                 int c2 = 0;
                 for (int i2 = 0; i2 < 1 && f2; i2++)
                 {
-                  rule = Terminal_NumericValue.Parse(context, "%x2C", "[\\x2C]", 1);
+                  rule = Terminal_StringValue.Parse(context, ",");
                   if ((f2 = rule != null))
                   {
                     a2.Add(rule, context.index);

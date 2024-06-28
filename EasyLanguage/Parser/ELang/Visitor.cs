@@ -27,10 +27,9 @@ namespace Global.Parser.ELang {
     Object Visit(Rule_member_name rule);
     Object Visit(Rule_array rule);
     Object Visit(Rule_vector rule);
+    Object Visit(Rule_char rule);
     Object Visit(Rule_quote rule);
     Object Visit(Rule_unquote rule);
-    Object Visit(Rule_deref rule);
-    Object Visit(Rule_metadata rule);
     Object Visit(Rule_as_is rule);
     Object Visit(Rule_number rule);
     Object Visit(Rule_decimal_point rule);

@@ -283,6 +283,18 @@ namespace Global.Parser.ELang {
       return null;
     }
 
+    public Object Visit(Rule_char rule)
+    {
+      if (!terminal) System.Console.WriteLine();
+      Console.Write("<char>");
+      terminal = false;
+      VisitRules(rule.rules);
+      if (!terminal) System.Console.WriteLine();
+      Console.Write("</char>");
+      terminal = false;
+      return null;
+    }
+
     public Object Visit(Rule_quote rule)
     {
       if (!terminal) System.Console.WriteLine();
@@ -303,30 +315,6 @@ namespace Global.Parser.ELang {
       VisitRules(rule.rules);
       if (!terminal) System.Console.WriteLine();
       Console.Write("</unquote>");
-      terminal = false;
-      return null;
-    }
-
-    public Object Visit(Rule_deref rule)
-    {
-      if (!terminal) System.Console.WriteLine();
-      Console.Write("<deref>");
-      terminal = false;
-      VisitRules(rule.rules);
-      if (!terminal) System.Console.WriteLine();
-      Console.Write("</deref>");
-      terminal = false;
-      return null;
-    }
-
-    public Object Visit(Rule_metadata rule)
-    {
-      if (!terminal) System.Console.WriteLine();
-      Console.Write("<metadata>");
-      terminal = false;
-      VisitRules(rule.rules);
-      if (!terminal) System.Console.WriteLine();
-      Console.Write("</metadata>");
       terminal = false;
       return null;
     }

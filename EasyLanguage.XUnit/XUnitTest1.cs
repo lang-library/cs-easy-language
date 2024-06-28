@@ -33,12 +33,5 @@ public class XUnitTest1
         Assert.Equal("""
             [{"!":"symbol","?":"add2"},777,888]
             """, ELang.ToJson(el2));
-        var el3 = ELang.FromJson("""
-            ?_!%&-=+*<>/
-            """);
-        Print(ELang.ToJson(el3), "el3");
-        Assert.Equal("""
-            {"!":"deref","?":{"!":"symbol","?":"_!%&-=+*<>/"}}
-            """, ELang.ToJson(el3));
     }
 }

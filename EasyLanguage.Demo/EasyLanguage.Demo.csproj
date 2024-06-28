@@ -53,4 +53,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <Content Update="assets\test-funcs.js" Link="assets\test-funcs.js" />
+  </ItemGroup>
 </Project>

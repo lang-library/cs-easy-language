@@ -30,7 +30,7 @@ public class ELangScript
             globalThis.FromJson = ELangAssembly.Global.ELang.FromJson;
             globalThis.FromObject = ELangAssembly.Global.ELang.FromObject;
             globalThis.ToJson = ELangAssembly.Global.ELang.ToJson;
-            Load("assets/test.js");
+            //Load("assets/test.js");
             var map = FromObject({ a: 123 });
             Echo(map, "map");
             """);

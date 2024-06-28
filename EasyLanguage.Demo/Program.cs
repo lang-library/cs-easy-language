@@ -38,6 +38,10 @@ static class Program
                 transpile(ast);
                 """);
 #endif
+            engine.AddHostType(typeof(Console));
+            engine.Execute("""
+            Load("assets/test-funcs.js");
+            """);
             string script = ELang2Transform.transpile(ast);
             Echo(script, "script");
             var output = engine.Evaluate(script);

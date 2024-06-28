@@ -146,7 +146,11 @@ public class ELang2Transform
     public static string gettype(object x)
     {
         string fullName = FullName(x);
-        if (x is System.Int32)
+        if (
+            (x is System.Int32)
+            ||
+            (x is System.Double)
+            )
         {
             return "number";
         }
@@ -156,7 +160,7 @@ public class ELang2Transform
         }
         else if (x is List<object> list)
         {
-            return "array";
+            return "list";
         }
         else if (x is Dictionary<string, object> dict)
         {
@@ -171,71 +175,21 @@ public class ELang2Transform
     }
     static string gettype_for_special_bag(dynamic x)
     {
-        return x['!'];
+        return x["!"];
     }
 #if false
-function transpile(ast)
-{
-    Echo(globalThis['JSON'].stringify(11));
-    ast = FromObject(ast);
-    var sb = new StringBuilder();
-    transpileBody(ast, sb);
-    return sb.ToString();
-}
 
-function transpileBody(ast, sb)
-{
-    Echo(ast, "ast");
-    let type = gettype(ast);
-    Echo(type, "type");
-    switch (type) {
-        case "number":
-            sb.Append(ast);
-            return;
-        case "string":
-            sb.Append(ast);
-            return;
-        case "as-is":
-            sb.Append(ast["?"].trim());
-            return;
-        case "quote":
-            sb.Append(JSON.stringify(ast["?"]));
-            return;
-        case "bag":
-            transpileBag(ast, sb);
-            return;
-        case "list":
-            transpileList(ast, sb);
-            return;
-        default:
-            throw new Error(`type:${type} is not supported`);
-    }
-    return "dummy-script";
-}
-
-function transpileBag(ast, sb) {
-    sb.Append("{");
-    let i = 0;
-    for (x of ast) {
-        if (i > 0) sb.Append(",");
-        let key = x["Key"];
-        let val = x["Value"];
-        sb.Append(JSON.stringify(key));
-        sb.Append(":");
-        transpileBody(val, sb);
-        i++;
-    }
-    sb.Append("}");
-}
-
-function transpileList(ast, sb) {
-    Echo(ast.Count);
-    if (ast.Count == 0) throw new Error("list length is 0");
-    transpileFunCall(ast, sb);
-}
 
 
 #endif
+    public static string transpile(dynamic ast)
+    {
+        ast = FromObject(ast);
+        var sb = new StringBuilder();
+        transpileBody(ast, sb);
+        return sb.ToString();
+    }
+
     static void transpileBody(dynamic ast, StringBuilder sb)
     {
         Echo(ast, "ast");
@@ -250,13 +204,13 @@ function transpileList(ast, sb) {
                 sb.Append(ast);
                 return;
             case "as-is":
-                sb.Append(ast["?"].trim());
+                sb.Append(ast["?"].Trim());
                 return;
             case "quote":
                 sb.Append(new ObjectParser(false).Stringify(ast["?"], false));
                 return;
-#if false
-            case "bag":
+#if true
+            case "dict":
                 transpileBag(ast, sb);
                 return;
             case "list":
@@ -266,6 +220,30 @@ function transpileList(ast, sb) {
             default:
                 throw new Exception($"type:{type} is not supported");
         }
+    }
+
+    static void transpileBag(dynamic ast, StringBuilder sb)
+    {
+        sb.Append("{");
+        int i = 0;
+        foreach (var x in ast)
+        {
+            if (i > 0) sb.Append(",");
+            string key = (string)x.Key;
+            dynamic val = x.Value;
+            sb.Append(new ObjectParser(false).Stringify(key, false));
+            sb.Append(":");
+            transpileBody(val, sb);
+            i++;
+        }
+        sb.Append("}");
+    }
+
+    static void transpileList(dynamic ast, StringBuilder sb)
+    {
+        Echo(ast.Count);
+        if (ast.Count == 0) throw new Exception("list length is 0");
+        transpileFunCall(ast, sb);
     }
 
     static void transpileFunCall(dynamic ast, StringBuilder sb)
@@ -287,7 +265,6 @@ function transpileList(ast, sb) {
             transpileBody(ast[i], sb);
         }
         sb.Append(")");
-        //sb.Append(";");
     }
 
     static string transpieFunName(dynamic ast)

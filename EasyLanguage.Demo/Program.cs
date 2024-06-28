@@ -19,19 +19,14 @@ static class Program
     {
         ELang.ShowDetail = true;
 
-        string ss = "𠀋";
-        Echo(ss.Length);
-        Echo((uint)ss[0]);
-        Echo((uint)ss[1]);
-        Environment.Exit(0);
-
         string code = File.ReadAllText("assets/test.el");
-        var ast = ELang.FromCode(code);
+        var ast = ELang2.FromCode(code);
         Echo(ast, "ast");
 
 #if true
         using (var engine = ELangScript.CreateEngine())
         {
+#if false
             engine.Execute("""
             Load("assets/gettype.js");
             Load("assets/test.js");
@@ -42,13 +37,15 @@ static class Program
             string script = (string)engine.Evaluate("""
                 transpile(ast);
                 """);
+#endif
+            string script = ELang2Transform.transpile(ast);
             Echo(script, "script");
             var output = engine.Evaluate(script);
             Echo(output, "output");
             Echo(FromObject(output), "output");
         }
 #else
-        using (var engine = JintScript.CreateEngine())
+            using (var engine = JintScript.CreateEngine())
         {
             engine.Global.Set("ast", ast);
             engine.Execute("""

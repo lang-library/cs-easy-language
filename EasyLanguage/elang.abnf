@@ -128,7 +128,7 @@ char2 = unescaped2 /
 	 );
 unescaped2 = %x20-26 / %x28-5B / %x5D-FFFFFFFF;
 
-lisp-symbol = (lisp-char *lisp-char) / ( ( ":" / "\" ) lisp-char *lisp-char );
+lisp-symbol = (lisp-char *( lisp-char / "?" ) ) / ( ( ":" / "\" ) lisp-char *( lisp-char / "?" ) );
 
-#lisp-char = ( "." / "_" / "!" / "%" / "&" / "|" / "-" / "=" / "+" / "*" / "/" / "<" / ">" / "?" / %x41-5A / %x61-7A / %x30-39 / %x80-FFFFFFFF );
-lisp-char = ( "." / "_" / "!" / "%" / "&" / "|" / "-" / "=" / "+" / "*" / "/" / "<" / ">" / %x41-5A / %x61-7A / %x30-39 / %x80-FFFFFFFF );
+#lisp-char = ( "." / "_" / "!" / "%" / "&" / "|" / "-" / "=" / "+" / "*" / "/" / "<" / ">" / %x41-5A / %x61-7A / %x30-39 / %x80-FFFFFFFF );
+lisp-char = ( "." / "_" / "!" / "%" / "&" / "|" / "-" / "=" / "+" / "*" / "/" / "^" / "<" / ">" / %x41-5A / %x61-7A / %x30-39 / %x80-FFFFFFFF );

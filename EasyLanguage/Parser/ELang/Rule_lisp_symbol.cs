@@ -65,12 +65,71 @@ namespace Global.Parser.ELang {
                 int c2 = 0;
                 while (f2)
                 {
-                  rule = Rule_lisp_char.Parse(context);
-                  if ((f2 = rule != null))
+                  int g2 = context.index;
+                  List<ParserAlternative> as3 = new List<ParserAlternative>();
+                  parsed = false;
                   {
-                    a2.Add(rule, context.index);
-                    c2++;
+                    int s3 = context.index;
+                    ParserAlternative a3 = new ParserAlternative(s3);
+                    parsed = true;
+                    if (parsed)
+                    {
+                      bool f3 = true;
+                      int c3 = 0;
+                      for (int i3 = 0; i3 < 1 && f3; i3++)
+                      {
+                        rule = Rule_lisp_char.Parse(context);
+                        if ((f3 = rule != null))
+                        {
+                          a3.Add(rule, context.index);
+                          c3++;
+                        }
+                      }
+                      parsed = c3 == 1;
+                    }
+                    if (parsed)
+                    {
+                      as3.Add(a3);
+                    }
+                    context.index = s3;
                   }
+                  {
+                    int s3 = context.index;
+                    ParserAlternative a3 = new ParserAlternative(s3);
+                    parsed = true;
+                    if (parsed)
+                    {
+                      bool f3 = true;
+                      int c3 = 0;
+                      for (int i3 = 0; i3 < 1 && f3; i3++)
+                      {
+                        rule = Terminal_StringValue.Parse(context, "?");
+                        if ((f3 = rule != null))
+                        {
+                          a3.Add(rule, context.index);
+                          c3++;
+                        }
+                      }
+                      parsed = c3 == 1;
+                    }
+                    if (parsed)
+                    {
+                      as3.Add(a3);
+                    }
+                    context.index = s3;
+                  }
+
+                  b = ParserAlternative.GetBest(as3);
+
+                  parsed = b != null;
+
+                  if (parsed)
+                  {
+                    a2.Add(b.rules, b.end);
+                    context.index = b.end;
+                  }
+                  f2 = context.index > g2;
+                  if (parsed) c2++;
                 }
                 parsed = true;
               }
@@ -213,12 +272,71 @@ namespace Global.Parser.ELang {
                 int c2 = 0;
                 while (f2)
                 {
-                  rule = Rule_lisp_char.Parse(context);
-                  if ((f2 = rule != null))
+                  int g2 = context.index;
+                  List<ParserAlternative> as3 = new List<ParserAlternative>();
+                  parsed = false;
                   {
-                    a2.Add(rule, context.index);
-                    c2++;
+                    int s3 = context.index;
+                    ParserAlternative a3 = new ParserAlternative(s3);
+                    parsed = true;
+                    if (parsed)
+                    {
+                      bool f3 = true;
+                      int c3 = 0;
+                      for (int i3 = 0; i3 < 1 && f3; i3++)
+                      {
+                        rule = Rule_lisp_char.Parse(context);
+                        if ((f3 = rule != null))
+                        {
+                          a3.Add(rule, context.index);
+                          c3++;
+                        }
+                      }
+                      parsed = c3 == 1;
+                    }
+                    if (parsed)
+                    {
+                      as3.Add(a3);
+                    }
+                    context.index = s3;
                   }
+                  {
+                    int s3 = context.index;
+                    ParserAlternative a3 = new ParserAlternative(s3);
+                    parsed = true;
+                    if (parsed)
+                    {
+                      bool f3 = true;
+                      int c3 = 0;
+                      for (int i3 = 0; i3 < 1 && f3; i3++)
+                      {
+                        rule = Terminal_StringValue.Parse(context, "?");
+                        if ((f3 = rule != null))
+                        {
+                          a3.Add(rule, context.index);
+                          c3++;
+                        }
+                      }
+                      parsed = c3 == 1;
+                    }
+                    if (parsed)
+                    {
+                      as3.Add(a3);
+                    }
+                    context.index = s3;
+                  }
+
+                  b = ParserAlternative.GetBest(as3);
+
+                  parsed = b != null;
+
+                  if (parsed)
+                  {
+                    a2.Add(b.rules, b.end);
+                    context.index = b.end;
+                  }
+                  f2 = context.index > g2;
+                  if (parsed) c2++;
                 }
                 parsed = true;
               }

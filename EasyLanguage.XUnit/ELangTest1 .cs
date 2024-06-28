@@ -118,12 +118,12 @@ public class Elang1Test1
     public void Test09()
     {
         var o1 = Global.EasyLanguageParser.Parse("""
-            [true false null true1, false1, null1]
+            [^ lisp? true false null true1, false1, null1]
             """);
         string json1 = new ObjectParser().Stringify(o1, false);
         Print(json1, "json1");
         Assert.Equal("""
-            [true,false,null,{"!":"symbol","?":"true1"},{"!":"symbol","?":"false1"},{"!":"symbol","?":"null1"}]
+            [{"!":"symbol","?":"^"},{"!":"symbol","?":"lisp?"},true,false,null,{"!":"symbol","?":"true1"},{"!":"symbol","?":"false1"},{"!":"symbol","?":"null1"}]
             """, json1);
     }
 }

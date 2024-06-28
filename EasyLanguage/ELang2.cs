@@ -1,8 +1,10 @@
-﻿using Jint.Native.Function;
+﻿using Esprima.Ast;
+using Jint.Native.Function;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Text;
 using static Global.ELang2;
 
 namespace Global;
@@ -92,7 +94,7 @@ public class ELang2
         else if (x is List<object> list)
         {
             var result = new List<object>();
-            foreach(var e in list)
+            foreach (var e in list)
             {
                 result.Add(TransformToAST(e));
             }
@@ -141,7 +143,7 @@ public class ELang2
 
 public class ELang2Transform
 {
-    public string GetType(object x)
+    public static string gettype(object x)
     {
         string fullName = FullName(x);
         if (x is System.Int32)
@@ -167,7 +169,7 @@ public class ELang2Transform
             throw new Exception($"gettype(): {fullName} is not supported");
         }
     }
-    string gettype_for_special_bag(dynamic x)
+    static string gettype_for_special_bag(dynamic x)
     {
         return x['!'];
     }
@@ -232,45 +234,100 @@ function transpileList(ast, sb) {
     transpileFunCall(ast, sb);
 }
 
-function transpileFunCall(ast, sb) {
-    let first = ast[0];
-    Echo(first, "first");
-    first = transpieFunName(first);
-    Echo(first, "first");
-    if (first in funcList) {
-        funcList[first](ast, sb);
-        return;
-    }
-    sb.Append(first);
-    sb.Append("(");
-    for (let i = 1; i < ast.Count; i++) {
-        if (i > 1) sb.Append(",");
-        transpileBody(ast[i], sb);
-    }
-    sb.Append(")");
-    //sb.Append(";");
-}
 
-function transpieFunName(ast, sb) {
-    let type = gettype(ast);
-    if (type == "string") return ast;
-    if (type == "list") {
-        if (ast.Count == 0) throw new Error("dot notation length is 0");
-        let first = ast[0];
-        Echo(first, "first(dot notation)");
-        let result = "";
-        for (let i = 1; i < ast.Count; i++) {
-            if (i > 1) result += ".";
-            result += ast[i];
-        }
-        return result;
-    }
-}
 #endif
-
-
-    public string ToJavaScript(object x)
+    static void transpileBody(dynamic ast, StringBuilder sb)
     {
-
+        Echo(ast, "ast");
+        string type = gettype(ast);
+        Echo(type, "type");
+        switch (type)
+        {
+            case "number":
+                sb.Append(ast);
+                return;
+            case "string":
+                sb.Append(ast);
+                return;
+            case "as-is":
+                sb.Append(ast["?"].trim());
+                return;
+            case "quote":
+                sb.Append(new ObjectParser(false).Stringify(ast["?"], false));
+                return;
+#if false
+            case "bag":
+                transpileBag(ast, sb);
+                return;
+            case "list":
+                transpileList(ast, sb);
+                return;
+#endif
+            default:
+                throw new Exception($"type:{type} is not supported");
+        }
     }
-}
+
+    static void transpileFunCall(dynamic ast, StringBuilder sb)
+    {
+        dynamic first = ast[0];
+        Echo(first, "first");
+        first = transpieFunName(first);
+        Echo(first, "first");
+        if (funcList.ContainsKey(first))
+        {
+            funcList[first](ast, sb);
+            return;
+        }
+        sb.Append(first);
+        sb.Append("(");
+        for (int i = 1; i < ast.Count; i++)
+        {
+            if (i > 1) sb.Append(",");
+            transpileBody(ast[i], sb);
+        }
+        sb.Append(")");
+        //sb.Append(";");
+    }
+
+    static string transpieFunName(dynamic ast)
+    {
+        string type = gettype(ast);
+        if (type == "string") return ast;
+        if (type == "list")
+        {
+            if (ast.Count == 0) throw new Exception("dot notation length is 0");
+            string first = ast[0];
+            Echo(first, "first(dot notation)");
+            string result = "";
+            for (int i = 1; i < ast.Count; i++)
+            {
+                if (i > 1) result += ".";
+                result += ast[i];
+            }
+            return result;
+        }
+        throw new Exception($"transpieFunName(): type {type} not expected");
+    }
+
+    delegate dynamic TranspilerFunction(dynamic ast, StringBuilder sb);
+    static Dictionary<string, TranspilerFunction> funcList = new Dictionary<string, TranspilerFunction>()
+        {
+        {"program", (dynamic ast, StringBuilder sb) => {
+            for (int i = 1; i<ast.Count; i++) {
+                transpileBody(ast[i], sb);
+                sb.Append(";");
+            }
+            return null;
+        }},
+        {"define",  (dynamic ast, StringBuilder sb) => {
+            sb.Append("var ");
+            sb.Append(ast[1]);
+            sb.Append("=");
+            transpileBody(ast[2], sb);
+            return null;
+        }
+        }
+    };
+
+};

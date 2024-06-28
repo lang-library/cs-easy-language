@@ -55,7 +55,7 @@ vector = begin-vector [ value *( value-separator value ) ] end-vector;
 #char = "?" %x00-FFFFFFFF;
 char = ( "?" %x00-7F ) / ( "?" %x80-FFFFFFFF *( %x80-FFFFFFFF ) );
 
-quote = ("'" / "`") value;
+quote = ("'" / "`" / "$'") value;
 
 unquote =  ( "~@" value ) / ( "~" value );
 

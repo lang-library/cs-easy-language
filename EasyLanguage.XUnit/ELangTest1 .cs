@@ -105,6 +105,14 @@ public class Elang1Test1
     [Fact]
     public void Test08()
     {
+        var o1 = Global.EasyLanguageParser.Parse("""
+            $'string
+            """);
+        string json1 = new ObjectParser().Stringify(o1, false);
+        Print(json1, "json1");
+        Assert.Equal("""
+            {"!":"function-quote","?":{"!":"symbol","?":"string"}}
+            """, json1);
     }
     [Fact]
     public void Test09()

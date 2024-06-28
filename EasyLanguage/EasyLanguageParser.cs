@@ -246,8 +246,10 @@ public class EasyLanguageParser
             var result = new Dictionary<string, object>();
             if (rule.spelling.StartsWith("'"))
                 result["!"] = "quote";
-            else
+            else if (rule.spelling.StartsWith("`"))
                 result["!"] = "quasi-quote";
+            else if (rule.spelling.StartsWith("$'"))
+                result["!"] = "function-quote";
             result["?"] = value;
             return result;
         }

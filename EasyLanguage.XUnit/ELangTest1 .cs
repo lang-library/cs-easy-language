@@ -93,6 +93,7 @@ public class Elang1Test1
     [Fact]
     public void Test07()
     {
+        // 𠀋 https://www.softel.co.jp/blogs/tech/archives/596 UTF-8で4バイトになる文字
         var o1 = Global.EasyLanguageParser.Parse("""
             ?𠀋
             """);

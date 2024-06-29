@@ -44,6 +44,7 @@
     <PackageReference Include="Microsoft.ClearScript.Complete" Version="7.4.5" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\cs-globals\Globals.Ext\Globals.Ext.csproj" />
     <ProjectReference Include="..\EasyLanguage\EasyLanguage.csproj" />
   </ItemGroup>
   <ItemGroup>

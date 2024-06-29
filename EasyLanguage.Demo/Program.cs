@@ -44,6 +44,9 @@ static class Program
             """);
             string script = ELang2Transform.transpile(ast);
             Echo(script, "script");
+            File.WriteAllText("tmp.js", script);
+            script = Busybox.Output("js-beautify.cmd tmp.js");
+            Echo(script, "script");
             var output = engine.Evaluate(script);
             Echo(output, "output");
             Echo(FromObject(output), "output");

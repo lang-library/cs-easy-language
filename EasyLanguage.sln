@@ -11,6 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyLanguage.XUnit", "EasyL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyLanguage.Test", "EasyLanguage.Test\EasyLanguage.Test.csproj", "{AD779EAA-C082-4646-8B5C-0653DFD69ABC}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Globals.Ext", "..\cs-globals\Globals.Ext\Globals.Ext.csproj", "{241D5612-92D7-4461-9DF9-C526DB85238F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Globals", "..\cs-globals\Globals\Globals.csproj", "{6952841D-FB46-49C5-BFC3-FA2901A99C18}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{AD779EAA-C082-4646-8B5C-0653DFD69ABC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD779EAA-C082-4646-8B5C-0653DFD69ABC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD779EAA-C082-4646-8B5C-0653DFD69ABC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{241D5612-92D7-4461-9DF9-C526DB85238F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{241D5612-92D7-4461-9DF9-C526DB85238F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{241D5612-92D7-4461-9DF9-C526DB85238F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{241D5612-92D7-4461-9DF9-C526DB85238F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6952841D-FB46-49C5-BFC3-FA2901A99C18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6952841D-FB46-49C5-BFC3-FA2901A99C18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6952841D-FB46-49C5-BFC3-FA2901A99C18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6952841D-FB46-49C5-BFC3-FA2901A99C18}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

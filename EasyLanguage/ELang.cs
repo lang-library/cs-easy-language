@@ -165,7 +165,7 @@ public class ELang2Transform
         else if (x is Dictionary<string, object> dict)
         {
             if (dict.ContainsKey("!"))
-                return gettype_for_special_bag(x);
+                return (string)dict["!"]; // gettype_for_special_bag(x);
             return "dict";
         }
         else
@@ -173,10 +173,12 @@ public class ELang2Transform
             throw new Exception($"gettype(): {fullName} is not supported");
         }
     }
+#if false
     static string gettype_for_special_bag(dynamic x)
     {
         return x["!"];
     }
+#endif
     public static string transpile(dynamic ast)
     {
         ast = FromObject(ast);

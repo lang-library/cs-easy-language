@@ -1,0 +1,9 @@
+[submodule "el/easy-lang"]
+	path = el/easy-lang
+	url = https://github.com/emacs-pkg/easy-lang
+[submodule "el/eoops"]
+	path = el/eoops
+	url = https://github.com/emacs-pkg/eoops
+[submodule "el/at-el"]
+	path = el/at-el
+	url = https://github.com/skeeto/at-el

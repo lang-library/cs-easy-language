@@ -8,6 +8,7 @@ using Microsoft.ClearScript.V8;
 using System.ComponentModel;
 using System.Web.UI;
 using System.Text;
+using Antlr4.Runtime.Misc;
 
 namespace Main;
 
@@ -19,25 +20,24 @@ static class Program
     {
         ELang.ShowDetail = true;
 
+        var interp = NukataLisp.MakeInterp().Result;
+        interp.Def("add2", 2, a => {
+            var x = Convert.ToDecimal(a[0]);
+            Echo(FullName(x), "FullName(x)");
+            var y = Convert.ToDecimal(a[1]);
+            Echo(FullName(y), "FullName(y)");
+            return x + y;
+        });
+        StringReader sr = new StringReader("(print (add2 11 22))");
+        var r = NukataLisp.Run(interp, sr).Result;
+        Echo(r, "r");
+
         string code = File.ReadAllText("assets/test.el");
         var ast = ELang.FromCode(code);
         Echo(ast, "ast");
 
-#if true
         using (var engine = ELangScript.CreateEngine())
         {
-#if false
-            engine.Execute("""
-            Load("assets/gettype.js");
-            Load("assets/test.js");
-            """);
-            engine.AddHostObject("ast", ast);
-            engine.AddHostType(typeof(StringBuilder));
-            engine.AddHostType(typeof(Console));
-            string script = (string)engine.Evaluate("""
-                transpile(ast);
-                """);
-#endif
             engine.AddHostType(typeof(Console));
             engine.Execute("""
             Load("assets/test-funcs.js");
@@ -51,19 +51,14 @@ static class Program
             Echo(output, "output");
             Echo(FromObject(output), "output");
         }
-#else
-            using (var engine = JintScript.CreateEngine())
-        {
-            engine.Global.Set("ast", ast);
-            engine.Execute("""
-                load("assets/test.js");
-                """);
-            var script = engine.Evaluate("""
-                transpile(ast);
-                """);
-            Echo(script, "script");
-        }
-#endif
+
+
+        MyJS myJS = new MyJS();
+        myJS.Execute("""
+            function add2(a, b) { return a + b }
+            """);
+        Echo(myJS.Evaluate("add2($1, $2)", 111, 222));
+
         System.Environment.Exit(0);
 
         var el1 = ELang.FromJson("""
@@ -101,17 +96,6 @@ static class Program
 #endif
         var order = ELang.FromJson("{b: 123, a: 456, _:789}");
         Echo(order, "order");
-        var interp = NukataLisp.MakeInterp().Result;
-        interp.Def("add2", 2, a => {
-            var x = Convert.ToDecimal(a[0]);
-            Echo(FullName(x), "FullName(x)");
-            var y = Convert.ToDecimal(a[1]);
-            Echo(FullName(y), "FullName(y)");
-            return x + y;
-        });
-        StringReader sr = new StringReader("(print (add2 11 22))");
-        var r = NukataLisp.Run(interp, sr).Result;
-        Echo(r, "r");
 
         using (var engine = new V8ScriptEngine())
 

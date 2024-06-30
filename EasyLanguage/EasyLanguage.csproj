@@ -72,9 +72,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Remove="assets\test - コピー.js" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\cs-globals\Globals.Ext\Globals.Ext.csproj" />
   </ItemGroup>
 </Project>
